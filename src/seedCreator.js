@@ -3,7 +3,7 @@
 const Creator = require("./models/Creator");
 const { faker } = require("@faker-js/faker");
 
-const gender = ["F", "M"];
+const gender = ["F", "M", "U"];
 
 async function seedCreator() {
   try {
@@ -13,10 +13,11 @@ async function seedCreator() {
       const data = {
         image: `image (${i + 1}).png`,
         name: faker.internet.userName(),
+        cost: faker.number.int({ min: 1, max: 30 }),
         tags: ["item1", "item2", "item3"],
-        likes: faker.number.int({ min: 200, max: 3000 }),
+        likes: faker.number.int({ min: 1, max: 10000 }),
         location: faker.location.county(),
-        gender: gender[faker.number.int({ max: 1 })],
+        gender: gender[faker.number.int({ max: 2 })],
         description: faker.lorem.sentence(),
       };
       creators.push(data);

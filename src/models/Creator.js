@@ -5,12 +5,13 @@ const mongoose = require("mongoose"),
 1. CREATE Creator SCHEMA
  */
 
-const GENDERS = ["M", "F"];
+const GENDERS = ["M", "F", "U"];
 const CreatorSchema = new Schema(
   {
     image: { type: String },
     name: { type: String },
     tags: [String],
+    cost: { type: Number },
     likes: { type: Number },
     location: { type: String },
     gender: { type: String, enum: GENDERS },
