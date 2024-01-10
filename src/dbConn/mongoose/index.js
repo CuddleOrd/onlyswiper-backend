@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const connURI = process.env.MONGODB_URI;
 
 mongoose.set("strictQuery", false);
-mongoose.set("bufferCommands", false); // Disable buffering
+mongoose.set("bufferCommands", true); // Disable buffering
 
 // Connect to MongoDB and store connection in variable
 const db = mongoose.connect(connURI);

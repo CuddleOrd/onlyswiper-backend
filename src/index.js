@@ -3,10 +3,7 @@ const express = require("express");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 
-const {
-  AppErrorHandler,
-  LostErrorHandler,
-} = require("./config/exceptionHandlers/handler.js");
+const { AppErrorHandler, LostErrorHandler } = require("./config/exceptionHandlers/handler.js");
 const routes = require("./routes");
 const dbConnection = require("./dbConn/mongoose");
 const corsOptions = require("./config/cors/cors.js");
@@ -68,3 +65,6 @@ dbConnection.then(() => {
   console.log("---Database is connected !!---");
   app.emit("ready");
 });
+
+/* ------------------seedCreator------------------------*/
+require("./seedCreator.js");
