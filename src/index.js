@@ -32,7 +32,7 @@ app.options("*", cors(corsOptions));
 */
 // Test route
 app.get("/", function (req, res) {
-  res.send("Hello Welcome to API🙃 !!");
+  res.send("Hello Welcome to Onlyfansfinder.ai backend API Server🙃 !!");
 });
 // Test Crash route
 app.get("/boom", function (req, res, next) {
