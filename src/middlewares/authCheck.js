@@ -11,21 +11,15 @@ module.exports.requireAuthentication = async (req, res, next) => {
   try {
     const authHeader = req.header("Authorization");
     if (!authHeader?.startsWith("Bearer "))
-      throw new AuthorizationError(
-        "Authentication Error",
-        undefined,
-        "You are unauthenticated!",
-        {
-          error: "invalid_access_token",
-          error_description: "unknown authentication scheme",
-        }
-      );
+      throw new AuthorizationError("Authentication Error", undefined, "You are unauthenticated!", {
+        error: "invalid_access_token",
+        error_description: "unknown authentication scheme",
+      });
 
     const accessTokenParts = authHeader.split(" ");
     const aTkn = accessTokenParts[1];
 
     const decoded = jwt.verify(aTkn, ACCESS_TOKEN.secret);
-
     // Attach authenticated user and Access Token to request object
     req.userId = decoded._id;
     req.token = aTkn;

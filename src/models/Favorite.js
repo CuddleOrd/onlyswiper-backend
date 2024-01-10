@@ -7,8 +7,8 @@ const mongoose = require("mongoose"),
 
 const LikesSchema = new Schema(
   {
-    creator_id: { type: String },
-    flag: { type: Boolean },
+    user_id: { type: String },
+    creator_id: [{ type: String }],
   },
   {
     timestamps: {
