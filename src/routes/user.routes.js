@@ -8,16 +8,6 @@ const router = express.Router();
 
 // TEST Route
 router.get("/", function (req, res) {
-  const express = require("express");
-
-  const creatorsControllers = require("../controllers/creators");
-
-  const router = express.Router();
-
-  router.post("/filter", creatorsControllers.filter);
-
-  module.exports = router;
-
   res.send("Hello /api/users routing works 🥂!!");
 });
 
