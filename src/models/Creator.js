@@ -8,13 +8,17 @@ const mongoose = require("mongoose"),
 const GENDERS = ["M", "F", "U"];
 const CreatorSchema = new Schema(
   {
-    image: { type: String },
+    avatar: { type: String },
     name: { type: String },
+    gender: { type: String, enum: GENDERS },
+    age: {type: Number},
+    location: { type: String },
+
     tags: [String],
+    
     cost: { type: Number },
     likes: { type: Number },
-    location: { type: String },
-    gender: { type: String, enum: GENDERS },
+    
     description: { type: String },
   },
   {

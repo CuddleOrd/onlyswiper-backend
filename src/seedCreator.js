@@ -11,15 +11,20 @@ async function seedCreator() {
     const creators = [];
     for (let i = 0; i < 39; i++) {
       const data = {
-        image: `image (${i + 1}).png`,
+        avatar: `image (${i + 1}).png`,
         name: faker.internet.userName(),
-        cost: faker.number.int({ min: 1, max: 30 }),
-        tags: ["item1", "item2", "item3"],
-        likes: faker.number.int({ min: 1, max: 10000 }),
-        location: faker.location.county(),
         gender: gender[faker.number.int({ max: 2 })],
+        age: faker.number.int({min: 15, max:40}),
+        location: faker.location.county(),
+
+        tags: ["item1", "item2", "item3"],
+
+        cost: faker.number.int({ min: 1, max: 30 }),
+        likes: faker.number.int({ min: 1, max: 10000 }),
+        
         description: faker.lorem.sentence(),
       };
+
       creators.push(data);
     }
 
