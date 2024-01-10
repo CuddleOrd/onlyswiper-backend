@@ -1,21 +1,17 @@
 /* ------------------seedCreator------------------------*/
 
-const fs = require("fs");
 const Creator = require("./models/Creator");
 const { faker } = require("@faker-js/faker");
 
-const folderPath = "./IMAGE";
 const gender = ["F", "M"];
 
 async function seedCreator() {
   try {
-    const files = await fs.promises.readdir(folderPath);
-    console.log("Files in the folder:", files);
     await Creator.deleteMany({});
     const creators = [];
-    for (let i = 0; i < files.length; i++) {
+    for (let i = 0; i < 39; i++) {
       const data = {
-        image: files[i],
+        image: `image (${i + 1}).png`,
         name: faker.internet.userName(),
         tags: ["item1", "item2", "item3"],
         likes: faker.number.int({ min: 200, max: 3000 }),
