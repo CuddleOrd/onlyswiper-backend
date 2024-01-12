@@ -5,34 +5,29 @@ const crypto = require("crypto");
 
 const CustomError = require("../config/errors/CustomError");
 
-// Pull in Environment variables
+/**
+ * Pull in environment variables
+ */
 const ACCESS_TOKEN = {
   secret: process.env.AUTH_ACCESS_TOKEN_SECRET,
   expiry: process.env.AUTH_ACCESS_TOKEN_EXPIRY,
 };
+
 const REFRESH_TOKEN = {
   secret: process.env.AUTH_REFRESH_TOKEN_SECRET,
   expiry: process.env.AUTH_REFRESH_TOKEN_EXPIRY,
 };
+
 const RESET_PASSWORD_TOKEN = {
   expiry: process.env.RESET_PASSWORD_TOKEN_EXPIRY_MINS,
 };
 
-/* 
-1. CREATE USER SCHEMA
+/**
+ * User schema
  */
 const User = mongoose.Schema;
+
 const UserSchema = new User({
-  //   role: ROLES.CUSTOMER,
-  //   name: "",
-  //   email: "",
-  //   phone: "",
-  //   age: 0,
-  //   address: "",
-  //   qa: [],
-  //   characteristics: [],
-  //   subscriptionId: -1,
-  //   password: ""
   role: { type: String, required: [true, "Role is required"] },
   name: { type: String, required: [true, "Name is required"] },
   email: { type: String, required: [true, "Email is required"], unique: true },
@@ -54,24 +49,23 @@ const UserSchema = new User({
       token: { required: true, type: String },
     },
   ],
-  resetpasswordtoken: String,
-  resetpasswordtokenexpiry: Date,
+  resetPasswordToken: String,
+  resetPasswordTokenExpiry: Date,
 });
 
-/* 
-2. SET SCHEMA OPTION
+/**
+ * Schema options
  */
 UserSchema.set("toJSON", {
   virtuals: true,
   transform: function (doc, ret, options) {
     const { name, email } = ret;
-
-    return { name, email }; // return fields we need
+    return { name, email };
   },
 });
 
-/* 
-3. ATTACH MIDDLEWARE
+/**
+ * Attach middleware
  */
 UserSchema.pre("save", async function (next) {
   try {
@@ -85,22 +79,24 @@ UserSchema.pre("save", async function (next) {
   }
 });
 
-/* 
-4. ATTACH CUSTOM STATIC METHODS
+/**
+ * Attach custom static methods 
  */
 UserSchema.statics.findByCredentials = async (email, password) => {
   const user = await UserModel.findOne({ email });
   if (!user) throw new CustomError("Wrong credentials!", 400, "Email or password is wrong!");
+  
   const passwdMatch = await bcrypt.compare(password, user.password);
   if (!passwdMatch)
     throw new CustomError("Wrong credentials!!", 400, "Email or password is wrong!");
+  
   return user;
 };
 
-/* 
-5. ATTACH CUSTOM INSTANCE METHODS
+/**
+ * Attach custom instance methods
  */
-UserSchema.methods.generateAcessToken = function () {
+UserSchema.methods.generateAccessToken = function () {
   const user = this;
 
   // Create signed access token
@@ -160,16 +156,16 @@ UserSchema.methods.generateResetToken = async function () {
     .update(resetTokenValue)
     .digest("hex");
 
-  user.resetpasswordtoken = resetTokenHash;
-  user.resetpasswordtokenexpiry = Date.now() + (RESET_PASSWORD_TOKEN.expiry || 5) * 60 * 1000; // Sets expiration age
+  user.resetPasswordToken = resetTokenHash;
+  user.resetPasswordTokenExpiry = Date.now() + (RESET_PASSWORD_TOKEN.expiry || 5) * 60 * 1000; // Sets expiration age
 
   await user.save();
 
   return resetToken;
 };
 
-/* 
-6. COMPILE MODEL FROM SCHEMA
+/**
+ * Compile model from schema
  */
 const UserModel = mongoose.model("User", UserSchema);
 

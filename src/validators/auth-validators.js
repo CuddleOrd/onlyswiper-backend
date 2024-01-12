@@ -14,21 +14,9 @@ module.exports.loginValidator = [
 ];
 
 module.exports.signupValidator = [
-  //   role: ROLES.CUSTOMER,
-  //   name: " ",
-  //   email: "",
-  //   phone: "",
-  //   age: 0,
-  //   address: "",
-  //   qa: [],
-  //   characteristics: [],
-  //   subscriptionId: -1,
-  //   password: ""
-
   body("name").trim().notEmpty().withMessage("Name CANNOT be empty"),
   body("phone").trim().notEmpty().withMessage("Phone CANNOT be empty"),
   body("address").trim().notEmpty().withMessage("Address CANNOT be empty"),
-  // body("age").isLength({ min: 4 }).withMessage("Age MUST be at least 4 characters long"),
   body("email")
     .trim()
     .notEmpty()

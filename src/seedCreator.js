@@ -1,13 +1,15 @@
 /* ------------------seedCreator------------------------*/
 
-const Creator = require("./models/Creator");
 const { faker } = require("@faker-js/faker");
+
+const Creator = require("./models/Creator");
 
 const gender = ["F", "M", "U"];
 
 async function seedCreator() {
   try {
     await Creator.deleteMany({});
+    
     const creators = [];
     for (let i = 0; i < 39; i++) {
       const data = {
@@ -36,5 +38,4 @@ async function seedCreator() {
 }
 
 // Call the async function
-
 module.exports = seedCreator();

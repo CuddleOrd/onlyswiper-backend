@@ -2,12 +2,18 @@ const { validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 
-const User = require("../../models/User");
-const { sendEmail } = require("../../services/email/sendEmail");
-const CustomError = require("../../config/errors/CustomError");
-const AuthorizationError = require("../../config/errors/AuthorizationError");
+const User = require("../models/User");
+const { sendEmail } = require("../services/email/sendEmail");
+const CustomError = require("../config/errors/CustomError");
+const AuthorizationError = require("../config/errors/AuthorizationError");
 
-// Top-level constants
+/**
+ * Constants
+ */
+const ACCESS_TOKEN = {
+  secret: process.env.AUTH_ACCESS_TOKEN_SECRET,
+};
+
 const REFRESH_TOKEN = {
   secret: process.env.AUTH_REFRESH_TOKEN_SECRET,
   cookie: {
@@ -20,16 +26,18 @@ const REFRESH_TOKEN = {
     },
   },
 };
-// const ACCESS_TOKEN = {
-//   secret: process.env.AUTH_ACCESS_TOKEN_SECRET,
-// };
+
 const RESET_PASSWORD_TOKEN = {
   expiry: process.env.RESET_PASSWORD_TOKEN_EXPIRY_MINS,
 };
 
-/*
-  1. LOGIN USER
-*/
+/**
+ * Login
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
 module.exports.login = async (req, res, next) => {
   try {
     const errors = validationResult(req);
@@ -41,7 +49,7 @@ module.exports.login = async (req, res, next) => {
 
     /* Custom methods on user are defined in User model */
     const user = await User.findByCredentials(email, password); // Identify and retrieve user by credentials
-    const aTkn = await user.generateAcessToken(); // Create Access Token
+    const aTkn = await user.generateAccessToken(); // Create Access Token
     const refreshToken = await user.generateRefreshToken(); // Create Refresh Token
 
     // SET refresh Token cookie in response
@@ -59,25 +67,20 @@ module.exports.login = async (req, res, next) => {
   }
 };
 
-/*
-  2. SIGN UP USER 
-*/
+/**
+ * Sign Up
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
 module.exports.signup = async (req, res, next) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       throw new CustomError(errors.array(), 422, errors.array()[0]?.msg);
     }
-    //   role: ROLES.CUSTOMER,
-    //   name: "",
-    //   email: "",
-    //   phone: "",
-    //   age: 0,
-    //   address: "",
-    //   qa: [],
-    //   characteristics: [],
-    //   subscriptionId: -1,
-    //   password: ""
+    
     const {
       role,
       name,
@@ -90,6 +93,7 @@ module.exports.signup = async (req, res, next) => {
       subscriptionId,
       password,
     } = req.body;
+
     /* Custom methods on newUser are defined in User model */
     const newUser = new User({
       role,
@@ -104,12 +108,14 @@ module.exports.signup = async (req, res, next) => {
       password,
     });
     await newUser.save(); // Save new User to DB
-    const aTkn = await newUser.generateAcessToken(); // Create Access Token
+
+    const aTkn = await newUser.generateAccessToken(); // Create Access Token
     const refreshToken = await newUser.generateRefreshToken(); // Create Refresh Token
 
     // SET refresh Token cookie in response
     res.cookie(REFRESH_TOKEN.cookie.name, refreshToken, REFRESH_TOKEN.cookie.options);
     console.log(newUser, REFRESH_TOKEN.cookie.name, refreshToken, REFRESH_TOKEN.cookie.options);
+
     // Send Response on successful Sign Up
     res.status(201).json({
       success: true,
@@ -218,7 +224,7 @@ module.exports.refreshAccessToken = async (req, res, next) => {
       });
 
     // GENERATE NEW ACCESSTOKEN
-    const newAtkn = await userWithRefreshTkn.generateAcessToken();
+    const newAtkn = await userWithRefreshTkn.generateAccessToken();
     // GENERATE NEW REFRESHTOKEN
     // const newRtkn = await userWithRefreshTkn.generateRefreshToken();
 
@@ -370,6 +376,24 @@ module.exports.resetPassword = async (req, res, next) => {
     res.json({
       message: "Password reset successful",
       success: true,
+    });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+/* 
+  2. FETCH PROFILE OF AUTHENTICATED USER
+*/
+module.exports.fetchAuthUserProfile = async (req, res, next) => {
+  try {
+    const userId = req.userId;
+    const user = await User.findById(userId);
+
+    res.json({
+      success: true,
+      user,
     });
   } catch (error) {
     console.log(error);
