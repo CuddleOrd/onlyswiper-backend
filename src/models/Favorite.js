@@ -1,11 +1,7 @@
 const mongoose = require("mongoose"),
   Schema = mongoose.Schema;
 
-// Endpoint-- - "api/creators/liked";
-// payload-- - { id: creator_id, flag: true | false };
-// method-- - post(edited);
-
-const LikesSchema = new Schema(
+const FavoriteSchema = new Schema(
   {
     user_id: { type: String },
     creator_id: [{ type: String }],
@@ -17,6 +13,6 @@ const LikesSchema = new Schema(
     },
   }
 );
-const LikesModel = mongoose.model("Likes", LikesSchema);
+const FavoriteModel = mongoose.model("Favorite", FavoriteSchema);
 
-module.exports = LikesModel;
+module.exports = FavoriteModel;

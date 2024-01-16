@@ -3,13 +3,13 @@ const allowlist = ["http://localhost:3000", "http://localhost:8000", "https://on
 const corsOptions = {
   credentials: true,
   exposedHeaders: ["WWW-Authenticate"],
-  // origin: function (origin, callback) {
+  origin: function (origin, callback) {
   //   if (allowlist.includes(origin)) {
-  //     callback(null, true);
+      callback(null, true);
   //   } else {
   //     callback(new Error("Not allowed by CORS"));
   //   }
-  // }
+  }
 };
 
 module.exports = corsOptions;

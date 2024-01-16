@@ -22,36 +22,75 @@ const RESET_PASSWORD_TOKEN = {
   expiry: process.env.RESET_PASSWORD_TOKEN_EXPIRY_MINS,
 };
 
+const GENDERS = ["Male", "Female", "Unknown"];
+
 /**
  * User schema
  */
 const User = mongoose.Schema;
 
-const UserSchema = new User({
-  role: { type: String, required: [true, "Role is required"] },
-  name: { type: String, required: [true, "Name is required"] },
-  email: { type: String, required: [true, "Email is required"], unique: true },
-  phone: { type: String, required: [true, "Phone is required"] },
-  age: { type: String, required: [true, "Age is required"] },
-  address: { type: String, required: [true, "Address is required"] },
-  qa: {
-    question: String,
-    answers: [String],
-  },
-  characteristics: { type: [String] },
-  subscriptionId: { type: Number },
-  password: {
-    type: String,
-    required: true,
-  },
-  tokens: [
-    {
-      token: { required: true, type: String },
+const UserSchema = new User(
+  {
+    role: { type: String, required: [true, "Role is required"] },
+
+    name: { type: String, required: [true, "Name is required"] },
+    email: { type: String, required: [true, "Email is required"], unique: true },
+    phone: { type: String, required: [true, "Phone is required"] },
+    age: { type: Number, required: [true, "Age is required"] },
+    address: { type: String, required: [true, "Address is required"] },
+    
+    qa: {
+      question: String,
+      answers: [String],
     },
-  ],
-  resetPasswordToken: String,
-  resetPasswordTokenExpiry: Date,
-});
+    
+    characteristics: { type: [String] },
+    subscriptionId: { type: String },
+    
+    password: {
+      type: String,
+      required: true,
+    },
+
+    tokens: [
+      {
+        token: { required: true, type: String },
+      },
+    ],
+    
+    resetPasswordToken: String,
+    resetPasswordTokenExpiry: Date,
+
+    // Creator properties
+    avatar: {type: String, required: false},
+    gender: {type: String, required: false, enum: GENDERS},
+    description: {type: String, required: false},
+    cost: {type: Number, required: false},
+
+    items: {type: [String], required: false},
+    includes: {type: [String], required: false},
+
+    likes: {type: Number, required: false},
+    pictures: {type: Number, required: false},
+    videos: {type: Number, required: false},
+
+    shares: {
+      type: {
+        twitter: {type: Boolean},
+        instagram: {type: Boolean},
+        tiktok: {type: Boolean},
+      },
+      required: false
+    },
+  }, 
+  {
+    // Common properties
+    timestamps: {
+      createdAt: "created_at", // Use `created_at` to store the created date
+      updatedAt: "updated_at", // and `updated_at` to store the last updated date
+    },
+  }
+);
 
 /**
  * Schema options

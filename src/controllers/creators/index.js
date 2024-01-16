@@ -1,4 +1,4 @@
-const Creator = require("../../models/Creator");
+// const Creator = require("../../models/Creator");
 
 /* 
   1. FETCH creator PROFILE BY ID
@@ -12,13 +12,13 @@ const Creator = require("../../models/Creator");
 // }
 
 module.exports.filter = async (req, res, next) => {
-  const keywords = req.body;
-  filterData(keywords)
-    .then((result) => {
-      console.log(result);
-      return res.json(result);
-    })
-    .catch((error) => console.error(error));
+  // const keywords = req.body;
+  // filterData(keywords)
+  //   .then((result) => {
+  //     console.log(result);
+  //     return res.json(result);
+  //   })
+  //   .catch((error) => console.error(error));
 };
 
 async function filterData(payload) {
