@@ -31,10 +31,10 @@ async function seedCreators() {
         avatar: `image_${i.toString().padStart(2, "0")}.png`,
         gender: GENDERS[faker.number.int({min: 0, max: 2})],
         description: faker.lorem.paragraph(),
-        cost: faker.commerce.price({ min: 0, max: 100 }),
+        cost: faker.commerce.price({ min: 0, max: 50 }),
         
         items: [faker.internet.emoji()],
-        includes: ["onlyfans.com", name.replace(" ", ".")],
+        includes: ["onlyfans.com", name.replace(/ /g, ".").toLowerCase()],
 
         likes: faker.number.int({min: 100000, max: 999999}),
         pictures: faker.number.int({min: 1000, max: 9999}),
