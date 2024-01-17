@@ -95,13 +95,13 @@ const UserSchema = new User(
 /**
  * Schema options
  */
-UserSchema.set("toJSON", {
-  virtuals: true,
-  transform: function (doc, ret, options) {
-    const { name, email } = ret;
-    return { name, email };
-  },
-});
+// UserSchema.set("toJSON", {
+//   virtuals: true,
+//   transform: function (doc, ret, options) {
+//     const { name, email } = ret;
+//     return { name, email };
+//   },
+// });
 
 /**
  * Attach middleware

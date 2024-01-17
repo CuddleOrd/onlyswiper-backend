@@ -46,10 +46,9 @@ module.exports.login = async (req, res, next) => {
     }
 
     const { email, password } = req.body;
-
-    /* Custom methods on user are defined in User model */
-    const user = await User.findByCredentials(email, password); // Identify and retrieve user by credentials
-    const aTkn = await user.generateAccessToken(); // Create Access Token
+    const user = await User.findByCredentials(email, password);
+    
+    const accessToken = await user.generateAccessToken(); // Create Access Token
     const refreshToken = await user.generateRefreshToken(); // Create Refresh Token
 
     // SET refresh Token cookie in response
@@ -59,7 +58,7 @@ module.exports.login = async (req, res, next) => {
     res.json({
       success: true,
       user,
-      accessToken: aTkn,
+      accessToken,
     });
   } catch (error) {
     console.log(error);
@@ -74,7 +73,7 @@ module.exports.login = async (req, res, next) => {
  * @param {*} res 
  * @param {*} next 
  */
-module.exports.signup = async (req, res, next) => {
+module.exports.register = async (req, res, next) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -94,7 +93,6 @@ module.exports.signup = async (req, res, next) => {
       password,
     } = req.body;
 
-    /* Custom methods on newUser are defined in User model */
     const newUser = new User({
       role,
       name,
@@ -107,20 +105,19 @@ module.exports.signup = async (req, res, next) => {
       subscriptionId,
       password,
     });
-    await newUser.save(); // Save new User to DB
+    await newUser.save();
 
-    const aTkn = await newUser.generateAccessToken(); // Create Access Token
-    const refreshToken = await newUser.generateRefreshToken(); // Create Refresh Token
+    const accessToken = await newUser.generateAccessToken();
+    const refreshToken = await newUser.generateRefreshToken();
 
     // SET refresh Token cookie in response
     res.cookie(REFRESH_TOKEN.cookie.name, refreshToken, REFRESH_TOKEN.cookie.options);
-    console.log(newUser, REFRESH_TOKEN.cookie.name, refreshToken, REFRESH_TOKEN.cookie.options);
-
+    
     // Send Response on successful Sign Up
     res.status(201).json({
       success: true,
       user: newUser,
-      accessToken: aTkn,
+      accessToken
     });
   } catch (error) {
     console.log(error);
@@ -383,9 +380,13 @@ module.exports.resetPassword = async (req, res, next) => {
   }
 };
 
-/* 
-  2. FETCH PROFILE OF AUTHENTICATED USER
-*/
+/**
+ * Fetch authenticated user profile
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
 module.exports.fetchAuthUserProfile = async (req, res, next) => {
   try {
     const userId = req.userId;

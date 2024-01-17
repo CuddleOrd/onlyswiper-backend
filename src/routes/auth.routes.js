@@ -11,19 +11,15 @@ router.get("/", function (req, res) {
   res.send("Hello /api/auth routing works 🥂!!");
 });
 
-/**
- * @method - POST
- * @param {string} path - /api/auth/login
- * @description - User Login
- */
 router.post("/login", validators.loginValidator, authController.login);
+router.post("/register", validators.registerValidator, authController.register);
 
 /**
- * @method - POST
- * @param {string} path - /api/users/signup
- * @description - User Signup
+ * @method - GET
+ * @param {string} path - /api/auth/me
+ * @description - Get authenticated user
  */
-router.post("/signup", validators.signupValidator, authController.signup);
+router.get("/me", requireAuthentication, authController.fetchAuthUserProfile);
 
 /**
  * @method - POST
@@ -63,12 +59,5 @@ router.patch(
   validators.resetPasswordValidator,
   authController.resetPassword
 );
-
-/**
- * @method - GET
- * @param {string} path - /api/users/me
- * @description - Get authenticated user
- */
-router.get("/me", requireAuthentication, authController.fetchAuthUserProfile);
 
 module.exports = router;

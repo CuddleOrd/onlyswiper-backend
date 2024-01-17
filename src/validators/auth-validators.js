@@ -13,7 +13,7 @@ module.exports.loginValidator = [
   body("password").notEmpty().withMessage("Password CANNOT be empty"),
 ];
 
-module.exports.signupValidator = [
+module.exports.registerValidator = [
   body("name").trim().notEmpty().withMessage("Name CANNOT be empty"),
   body("phone").trim().notEmpty().withMessage("Phone CANNOT be empty"),
   body("address").trim().notEmpty().withMessage("Address CANNOT be empty"),
@@ -26,7 +26,6 @@ module.exports.signupValidator = [
     .withMessage("Email is invalid")
     .bail()
     .custom(async (email) => {
-      // Finding if email exists in Database
       const emailExists = await User.findOne({ email });
       if (emailExists) {
         throw new Error("E-mail already in use");
