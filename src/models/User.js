@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 
 const CustomError = require("../config/errors/CustomError");
+const { GENDERS } = require("../util/constants");
 
 /**
  * Pull in environment variables
@@ -21,8 +22,6 @@ const REFRESH_TOKEN = {
 const RESET_PASSWORD_TOKEN = {
   expiry: process.env.RESET_PASSWORD_TOKEN_EXPIRY_MINS,
 };
-
-const GENDERS = ["Male", "Female", "Unknown"];
 
 /**
  * User schema

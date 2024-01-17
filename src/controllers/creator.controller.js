@@ -1,4 +1,5 @@
-// const Creator = require("../../models/Creator");
+const User = require("../models/User");
+const { ROLES } = require("../util/constants");
 
 /* 
   1. FETCH creator PROFILE BY ID
@@ -11,14 +12,13 @@
 // gender: 'All' | 'male' | 'female' | 'unknown',
 // }
 
-module.exports.filter = async (req, res, next) => {
-  // const keywords = req.body;
-  // filterData(keywords)
-  //   .then((result) => {
-  //     console.log(result);
-  //     return res.json(result);
-  //   })
-  //   .catch((error) => console.error(error));
+module.exports.search = async (req, res, next) => {
+  const { keyword, params } = req.body;
+  console.log("req.body: ", req.body);
+  
+  const result = await User.find({ role: ROLES.CREATOR });
+
+  res.json(result)
 };
 
 async function filterData(payload) {

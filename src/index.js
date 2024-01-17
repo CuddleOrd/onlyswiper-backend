@@ -70,5 +70,7 @@ dbConnection.then(() => {
   app.emit("ready");
 });
 
-/* ------------------seedCreator------------------------*/
-// require("./seedCreator.js");
+/**
+ * Seed creators
+ */
+require("./seedCreators.js");
