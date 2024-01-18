@@ -13,6 +13,7 @@ router.get("/", function (req, res) {
 
 router.post("/login", validators.loginValidator, authController.login);
 router.post("/register", validators.registerValidator, authController.register);
+router.post("/logout", requireAuthentication, authController.logout);
 
 /**
  * @method - GET
@@ -21,12 +22,7 @@ router.post("/register", validators.registerValidator, authController.register);
  */
 router.get("/me", requireAuthentication, authController.fetchAuthUserProfile);
 
-/**
- * @method - POST
- * @param {string} path - /api/users/logout
- * @description - User Logout
- */
-router.post("/logout", requireAuthentication, authController.logout);
+
 
 /**
  * @method - POST
