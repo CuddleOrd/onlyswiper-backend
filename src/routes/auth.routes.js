@@ -14,6 +14,7 @@ router.get("/", function (req, res) {
 router.post("/login", validators.loginValidator, authController.login);
 router.post("/register", validators.registerValidator, authController.register);
 router.post("/logout", requireAuthentication, authController.logout);
+router.post("/reauth", authController.refreshAccessToken);
 
 /**
  * @method - GET
@@ -36,7 +37,7 @@ router.post("/master-logout", requireAuthentication, authController.logoutAllDev
  * @param {string} path - /api/users/reauth
  * @description - Refresh Access Token
  */
-router.post("/reauth", authController.refreshAccessToken);
+
 
 /**
  * @method - POST
