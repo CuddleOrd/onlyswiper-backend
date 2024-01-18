@@ -73,4 +73,4 @@ dbConnection.then(() => {
 /**
  * Seed creators
  */
-require("./seedCreators.js");
+// require("./seedCreators.js");

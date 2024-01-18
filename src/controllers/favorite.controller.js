@@ -1,4 +1,18 @@
+const User = require("../models/User");
 const Favorite = require("../models/Favorite");
+
+module.exports.get = async (req, res, next) => {
+  const user_id = req.userId;
+
+  try {
+    const favorite = await Favorite.findOne({ user_id });
+    const result = await User.find({ _id: { $in: favorite.creator_id }})
+    res.json(result);
+  } catch (error) {
+    console.error("Error favorite:", error);
+    next(error);
+  }
+};
 
 module.exports.like = async (req, res, next) => {
   const { creator_id } = req.body;
@@ -12,7 +26,6 @@ module.exports.like = async (req, res, next) => {
       upsert: true,
     });
 
-    console.log(result);
     res.json(result);
   } catch (error) {
     console.error("Error favorite:", error);
