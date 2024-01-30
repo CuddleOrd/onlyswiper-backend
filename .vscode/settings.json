@@ -1,0 +1,21 @@
+{
+  "cSpell.words": [
+    "Kneeshaw",
+    "onlyfans",
+    "onlyfansfinder",
+    "onlyfansfinderai",
+    "Parens",
+    "plusplus",
+    "tiktok"
+  ],
+  "prettier.configPath": ".prettierrc.json",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+    "source.fixAll.format": "explicit"
+  },
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnPaste": true,
+  "editor.formatOnSave": true,
+  "editor.formatOnType": true,
+  "editor.tabSize": 2
+}
