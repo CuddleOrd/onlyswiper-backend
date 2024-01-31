@@ -30,6 +30,8 @@ export default async function creatorSeeder() {
         password: faker.internet.password(),
         status: USER_STATUS.ACTIVE,
 
+        qa: [],
+
         characteristics: [faker.person.bio()],
         subscriptionId: "",
 
@@ -40,7 +42,9 @@ export default async function creatorSeeder() {
         cost: faker.commerce.price({ min: 0, max: 50 }),
 
         items: [faker.internet.emoji()],
-        includes: ["onlyfans.com", name.replace(/ /g, ".").toLowerCase()],
+        includes: `https://onlyfans.com/${name
+          .replace(/ /g, ".")
+          .toLowerCase()}`,
 
         likes: faker.number.int({ min: 100000, max: 999999 }),
         pictures: faker.number.int({ min: 1000, max: 9999 }),

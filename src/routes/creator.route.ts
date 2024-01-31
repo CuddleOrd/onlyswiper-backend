@@ -7,4 +7,9 @@ const router = express.Router();
 
 router.post("/search", authMiddleware, creatorController.search);
 
+router.post(
+  "/batch-create-by-scrapping",
+  creatorController.batchCreateByScrapping
+);
+
 export default router;

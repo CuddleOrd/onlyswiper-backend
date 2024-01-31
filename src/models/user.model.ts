@@ -32,7 +32,7 @@ interface IUser {
   cost?: number;
 
   items?: string[];
-  includes?: string[];
+  includes?: string;
 
   likes?: number;
   pictures?: number;
@@ -77,7 +77,7 @@ interface UserDocument extends Document {
   cost?: number;
 
   items?: string[];
-  includes?: string[];
+  includes?: string;
 
   likes?: number;
   pictures?: number;
@@ -123,7 +123,7 @@ const UserSchema: Schema = new Schema(
     cost: { type: Number, required: false },
 
     items: { type: [String], required: false },
-    includes: { type: [String], required: false },
+    includes: { type: String, required: false },
 
     likes: { type: Number, required: false },
     pictures: { type: Number, required: false },

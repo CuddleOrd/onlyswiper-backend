@@ -1,9 +1,10 @@
 /* eslint-disable prefer-destructuring */
+import { fakerEN_US as faker } from "@faker-js/faker";
 import { Request, Response, NextFunction } from "express";
 import httpStatus from "http-status";
 
 import { User } from "../models/user.model";
-import { GENDERS, USER_ROLES } from "../utils/const.util";
+import { GENDERS, USER_ROLES, USER_STATUS } from "../utils/const.util";
 
 /**
  * Search
@@ -115,6 +116,84 @@ async function search(req: Request, res: Response, next: NextFunction) {
   }
 }
 
+/**
+ * Batch create by scrapping data
+ *
+ * @param req
+ * @param res
+ * @param _next
+ */
+async function batchCreateByScrapping(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  const { models = [] } = req.body;
+
+  try {
+    const batchCreators = [];
+
+    for (let i = 0; i < models.length; i++) {
+      const one = models[i];
+      const strCurTime = new Date().getTime().toString();
+
+      const data = {
+        role: USER_ROLES.CREATOR,
+        name: one?.name ?? "",
+        email: `${one?.name ?? ""}.${strCurTime}@offai.com`,
+        phone: faker.phone.number(),
+        age: faker.number.int({ min: 15, max: 45 }),
+        address: [
+          faker.location.country(),
+          faker.location.state(),
+          faker.location.city(),
+          faker.location.streetAddress()
+        ].join(" "),
+        password: faker.internet.password(),
+        status: USER_STATUS.ACTIVE,
+
+        characteristics: one?.characteristics ?? [],
+        subscriptionId: "",
+
+        isStatic: false,
+        avatar: one?.avatar ?? "",
+        gender: one?.gender ?? GENDERS[faker.number.int({ min: 0, max: 2 })],
+        description: one?.description ?? "",
+        cost: one?.cost ?? 0,
+
+        items: [faker.internet.emoji()],
+        includes: one?.includes ?? "",
+
+        likes: one?.likes ?? 0,
+        pictures: one?.pictures ?? 0,
+        videos: one?.videos ?? 0,
+
+        shares: {
+          twitter: faker.datatype.boolean(),
+          instagram: faker.datatype.boolean(),
+          tiktok: faker.datatype.boolean()
+        }
+      };
+
+      batchCreators.push(data);
+    }
+
+    const creators = await User.insertMany(batchCreators);
+
+    res.status(httpStatus.OK).json({
+      success: true,
+      models,
+      batchCreators,
+      creators
+    });
+  } catch (error) {
+    console.error("creator.controller batchCreateByScrapping error: ", error);
+  } finally {
+    next();
+  }
+}
+
 export default {
-  search
+  search,
+  batchCreateByScrapping
 };
