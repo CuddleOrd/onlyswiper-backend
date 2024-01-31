@@ -3,18 +3,18 @@ import { Document, model, Model, Schema } from "mongoose";
 interface IFavorite {
   _id?: string;
   userId: string;
-  creatorId: string;
+  creatorId: string[];
 }
 
 interface FavoriteDocument extends Document {
   userId: string;
-  creatorId: string;
+  creatorId: string[];
 }
 
 const FavoriteSchema: Schema = new Schema(
   {
     userId: { type: String, required: true },
-    creatorId: { type: String, required: true }
+    creatorId: { type: [String], required: true }
   },
   {
     timestamps: true,
