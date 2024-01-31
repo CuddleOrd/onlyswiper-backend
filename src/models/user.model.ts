@@ -19,12 +19,13 @@ interface IUser {
   qa: {
     question: string;
     answers: string[];
-  };
+  }[];
 
   // Creator properties
   characteristics: string[];
   subscriptionId: string;
 
+  isStatic?: boolean;
   avatar?: string;
   gender?: string;
   description?: string;
@@ -63,12 +64,13 @@ interface UserDocument extends Document {
   qa: {
     question: string;
     answers: string[];
-  };
+  }[];
 
   // Creator properties
   characteristics: string[];
   subscriptionId: string;
 
+  isStatic?: boolean;
   avatar?: string;
   gender?: string;
   description?: string;
@@ -101,14 +103,20 @@ const UserSchema: Schema = new Schema(
 
     // Customer properties
     qa: {
-      question: String,
-      answers: [String]
+      type: [
+        {
+          question: String,
+          answers: [String]
+        }
+      ],
+      required: false
     },
 
     // Creator properties
     characteristics: { type: [String], required: false },
     subscriptionId: { type: String, required: false },
 
+    isStatic: { type: Boolean, required: false },
     avatar: { type: String, required: false },
     gender: { type: String, required: false },
     description: { type: String, required: false },

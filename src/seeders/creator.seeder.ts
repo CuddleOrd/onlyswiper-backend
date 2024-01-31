@@ -33,6 +33,7 @@ export default async function creatorSeeder() {
         characteristics: [faker.person.bio()],
         subscriptionId: "",
 
+        isStatic: true,
         avatar: `static/creator/image_${i.toString().padStart(2, "0")}.png`,
         gender: GENDERS[faker.number.int({ min: 0, max: 2 })],
         description: faker.lorem.paragraph(),

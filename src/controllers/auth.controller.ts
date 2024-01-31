@@ -6,10 +6,16 @@ import { customAlphabet, nanoid } from "nanoid";
 import { genSaltSync, hashSync } from "bcryptjs";
 import { IUser, User } from "../models/user.model";
 import { RegisterToken } from "../models/register-token.model";
-import { APP_ENV, SITE_TITLE, USER_STATUS } from "../utils/const.util";
+import {
+  APP_ENV,
+  SITE_TITLE,
+  USER_ROLES,
+  USER_STATUS
+} from "../utils/const.util";
 import defaultConfig from "../config/default.config";
 import { sendEmail } from "../services/email.service";
 import { RefreshToken } from "../models/refresh-token.model";
+import upload from "../services/upload.service";
 
 /**
  * Login
@@ -304,40 +310,70 @@ async function updatePersonal(req: Request, res: Response, next: NextFunction) {
  * @param _next
  */
 async function updateFan(req: Request, res: Response, next: NextFunction) {
-  try {
-    if (!req.user) {
-      return;
-    }
-
-    const { _id: userId } = req.user;
-    const { name, email, phone, age, address } = req.body;
-
-    const existingEmail = await User.findOne({ email, _id: { $ne: userId } });
-
-    if (existingEmail) {
-      res.status(httpStatus.CONFLICT).json({
+  upload("creator").any()(req, res, async (err) => {
+    if (err) {
+      res.status(httpStatus.NOT_ACCEPTABLE).json({
         success: false,
-        msg: "Email is already in use."
+        msg: "Something went wrong while uploading images",
+        code: err.code
       });
       return;
     }
 
-    const user = await User.findByIdAndUpdate(
-      userId,
-      { name, email, phone, age, address },
-      { new: true }
-    );
+    try {
+      if (!req.user) {
+        return;
+      }
 
-    res.status(httpStatus.OK).json({
-      success: true,
-      user,
-      msg: "Fan information successfully modified."
-    });
-  } catch (error) {
-    console.error("auth.controller updateFan error: ", error);
-  } finally {
-    next();
-  }
+      const { _id: userId, role } = req.user;
+
+      if (role === USER_ROLES.CUSTOMER) {
+        const { qa } = req.body;
+
+        const user = await User.findByIdAndUpdate(
+          userId,
+          { qa },
+          { new: true }
+        );
+        res.status(httpStatus.OK).json({
+          success: true,
+          user,
+          msg: "Fan information successfully modified."
+        });
+      } else if (role === USER_ROLES.CREATOR) {
+        const { name, email, phone, age, address } = req.body;
+
+        const existingEmail = await User.findOne({
+          email,
+          _id: { $ne: userId }
+        });
+
+        if (existingEmail) {
+          res.status(httpStatus.CONFLICT).json({
+            success: false,
+            msg: "Email is already in use."
+          });
+          return;
+        }
+
+        const user = await User.findByIdAndUpdate(
+          userId,
+          { name, email, phone, age, address },
+          { new: true }
+        );
+
+        res.status(httpStatus.OK).json({
+          success: true,
+          user,
+          msg: "Fan information successfully modified."
+        });
+      }
+    } catch (error) {
+      console.error("auth.controller updateFan error: ", error);
+    } finally {
+      next();
+    }
+  });
 }
 
 /**
