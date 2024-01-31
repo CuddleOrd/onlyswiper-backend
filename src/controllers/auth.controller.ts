@@ -253,6 +253,94 @@ async function regenerateToken(
 }
 
 /**
+ * Update personal information
+ *
+ * @param req
+ * @param res
+ * @param _next
+ */
+async function updatePersonal(req: Request, res: Response, next: NextFunction) {
+  try {
+    if (!req.user) {
+      return;
+    }
+
+    const { _id: userId } = req.user;
+    const { name, email, phone, age, address } = req.body;
+
+    const existingEmail = await User.findOne({ email, _id: { $ne: userId } });
+
+    if (existingEmail) {
+      res.status(httpStatus.CONFLICT).json({
+        success: false,
+        msg: "Email is already in use."
+      });
+      return;
+    }
+
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { name, email, phone, age, address },
+      { new: true }
+    );
+
+    res.status(httpStatus.OK).json({
+      success: true,
+      user,
+      msg: "Personal information successfully modified."
+    });
+  } catch (error) {
+    console.error("auth.controller updatePersonal error: ", error);
+  } finally {
+    next();
+  }
+}
+
+/**
+ * Update fan information
+ *
+ * @param req
+ * @param res
+ * @param _next
+ */
+async function updateFan(req: Request, res: Response, next: NextFunction) {
+  try {
+    if (!req.user) {
+      return;
+    }
+
+    const { _id: userId } = req.user;
+    const { name, email, phone, age, address } = req.body;
+
+    const existingEmail = await User.findOne({ email, _id: { $ne: userId } });
+
+    if (existingEmail) {
+      res.status(httpStatus.CONFLICT).json({
+        success: false,
+        msg: "Email is already in use."
+      });
+      return;
+    }
+
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { name, email, phone, age, address },
+      { new: true }
+    );
+
+    res.status(httpStatus.OK).json({
+      success: true,
+      user,
+      msg: "Fan information successfully modified."
+    });
+  } catch (error) {
+    console.error("auth.controller updateFan error: ", error);
+  } finally {
+    next();
+  }
+}
+
+/**
  * Change password
  *
  * @param req
@@ -304,5 +392,7 @@ export default {
   logout,
   register,
   regenerateToken,
+  updatePersonal,
+  updateFan,
   changePassword
 };
