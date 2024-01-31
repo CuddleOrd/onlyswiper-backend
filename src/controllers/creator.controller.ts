@@ -1,3 +1,4 @@
+/* eslint-disable no-await-in-loop */
 /* eslint-disable prefer-destructuring */
 import { fakerEN_US as faker } from "@faker-js/faker";
 import { Request, Response, NextFunction } from "express";
@@ -132,6 +133,7 @@ async function batchCreateByScrapping(
 
   try {
     const batchCreators = [];
+    const creators = [];
 
     for (let i = 0; i < models.length; i++) {
       const one = models[i];
@@ -175,10 +177,15 @@ async function batchCreateByScrapping(
         }
       };
 
-      batchCreators.push(data);
-    }
+      const creator = await User.findOneAndUpdate(
+        { includes: data.includes },
+        data,
+        { new: true, upsert: true }
+      );
 
-    const creators = await User.insertMany(batchCreators);
+      batchCreators.push(data);
+      creators.push(creator);
+    }
 
     res.status(httpStatus.OK).json({
       success: true,
