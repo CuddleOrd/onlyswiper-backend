@@ -12,4 +12,6 @@ router.post("/register", authController.register);
 
 router.post("/regenerate-token", authController.regenerateToken);
 
+router.post("/change-password", authMiddleware, authController.changePassword);
+
 export default router;

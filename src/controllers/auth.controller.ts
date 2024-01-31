@@ -3,6 +3,7 @@ import httpStatus from "http-status";
 import { verify } from "jsonwebtoken";
 import { customAlphabet, nanoid } from "nanoid";
 
+import { genSaltSync, hashSync } from "bcryptjs";
 import { IUser, User } from "../models/user.model";
 import { RegisterToken } from "../models/register-token.model";
 import { APP_ENV, SITE_TITLE, USER_STATUS } from "../utils/const.util";
@@ -251,9 +252,57 @@ async function regenerateToken(
   }
 }
 
+/**
+ * Change password
+ *
+ * @param req
+ * @param res
+ * @param _next
+ */
+async function changePassword(req: Request, res: Response, next: NextFunction) {
+  try {
+    if (!req.user) {
+      return;
+    }
+
+    const { _id: userId } = req.user;
+    const { current, password } = req.body;
+
+    const user: IUser | null = await User.findById(userId);
+
+    if (!user) return;
+
+    if (!user.comparePassword(current)) {
+      res
+        .status(httpStatus.NOT_ACCEPTABLE)
+        .json({ success: false, msg: "Current password isn't correct" });
+      return;
+    }
+
+    const salt = genSaltSync(defaultConfig.bcrypt.salt);
+    const hashedPassword = hashSync(password, salt);
+
+    await User.findByIdAndUpdate(
+      userId,
+      { password: hashedPassword },
+      { new: true }
+    );
+
+    res.status(httpStatus.OK).json({
+      success: true,
+      msg: "Password successfully changed."
+    });
+  } catch (error) {
+    console.error("auth.controller changePassword error: ", error);
+  } finally {
+    next();
+  }
+}
+
 export default {
   login,
   logout,
   register,
-  regenerateToken
+  regenerateToken,
+  changePassword
 };
