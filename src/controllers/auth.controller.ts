@@ -335,32 +335,26 @@ async function updateFan(req: Request, res: Response, next: NextFunction) {
           { qa },
           { new: true }
         );
+
         res.status(httpStatus.OK).json({
           success: true,
           user,
           msg: "Fan information successfully modified."
         });
       } else if (role === USER_ROLES.CREATOR) {
-        const { name, email, phone, age, address } = req.body;
+        const update: Record<string, any> = {};
 
-        const existingEmail = await User.findOne({
-          email,
-          _id: { $ne: userId }
-        });
+        const { characteristics } = req.body;
+        update.characteristics = characteristics;
 
-        if (existingEmail) {
-          res.status(httpStatus.CONFLICT).json({
-            success: false,
-            msg: "Email is already in use."
-          });
-          return;
+        if (Array.isArray(req.files) && req.files.length > 0) {
+          update.isStatic = true;
+          update.avatar = req.files[0].path.replace(/\\/g, "/");
         }
 
-        const user = await User.findByIdAndUpdate(
-          userId,
-          { name, email, phone, age, address },
-          { new: true }
-        );
+        const user = await User.findByIdAndUpdate(userId, update, {
+          new: true
+        });
 
         res.status(httpStatus.OK).json({
           success: true,
