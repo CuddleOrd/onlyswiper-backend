@@ -107,7 +107,7 @@ async function search(req: Request, res: Response, next: NextFunction) {
       }
     }
 
-    const result = await User.find(query);
+    const result = await User.find(query).limit(100);
 
     res.status(httpStatus.OK).json({ success: true, result });
   } catch (error) {
