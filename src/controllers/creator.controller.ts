@@ -54,9 +54,21 @@ async function search(req: Request, res: Response, next: NextFunction) {
           }
           break;
 
-        case "Tags":
-          if (one.condition.value) {
-            query.characteristics = { $in: [one.condition.value] };
+        case "Gender":
+          switch (one.condition.value) {
+            case "all":
+              break;
+            case "Male":
+              query.gender = GENDERS[0];
+              break;
+            case "Female":
+              query.gender = GENDERS[1];
+              break;
+            case "Unknown":
+              query.gender = GENDERS[2];
+              break;
+            default:
+              break;
           }
           break;
 
@@ -78,24 +90,42 @@ async function search(req: Request, res: Response, next: NextFunction) {
           }
           break;
 
-        case "Location":
-          if (one.condition.value) {
-            query.address = new RegExp(one.condition.value);
-          }
-          break;
-
-        case "Gender":
+        case "Pictures":
           switch (one.condition.value) {
             case "all":
               break;
-            case "Male":
-              query.gender = GENDERS[0];
+            case "<100":
+              query.pictures = { $lte: 100 };
               break;
-            case "Female":
-              query.gender = GENDERS[1];
+            case "<500":
+              query.pictures = { $lte: 500 };
               break;
-            case "Unknown":
-              query.gender = GENDERS[2];
+            case "<1k":
+              query.pictures = { $lte: 1000 };
+              break;
+            case ">1k":
+              query.pictures = { $gte: 1000 };
+              break;
+            default:
+              break;
+          }
+          break;
+
+        case "Videos":
+          switch (one.condition.value) {
+            case "all":
+              break;
+            case "<100":
+              query.videos = { $lte: 100 };
+              break;
+            case "<500":
+              query.videos = { $lte: 500 };
+              break;
+            case "<1k":
+              query.videos = { $lte: 1000 };
+              break;
+            case ">1k":
+              query.videos = { $gte: 1000 };
               break;
             default:
               break;
@@ -107,7 +137,9 @@ async function search(req: Request, res: Response, next: NextFunction) {
       }
     }
 
-    const result = await User.find(query).limit(100);
+    const result = await User.find(query)
+      .sort({ likes: "desc", pictures: "desc", videos: "desc" })
+      .limit(50);
 
     res.status(httpStatus.OK).json({ success: true, result });
   } catch (error) {
