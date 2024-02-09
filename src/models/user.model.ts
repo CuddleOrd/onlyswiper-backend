@@ -1,6 +1,6 @@
 import { compareSync, genSaltSync, hashSync } from "bcryptjs";
-import { Document, model, Model, Schema } from "mongoose";
 import { sign } from "jsonwebtoken";
+import { Document, model, Model, Schema } from "mongoose";
 
 import defaultConfig from "../config/default.config";
 

@@ -1,9 +1,9 @@
+import { genSaltSync, hashSync } from "bcryptjs";
 import { Request, Response, NextFunction } from "express";
 import httpStatus from "http-status";
 import { verify } from "jsonwebtoken";
 import { customAlphabet, nanoid } from "nanoid";
 
-import { genSaltSync, hashSync } from "bcryptjs";
 import { IUser, User } from "../models/user.model";
 import { RegisterToken } from "../models/register-token.model";
 import {

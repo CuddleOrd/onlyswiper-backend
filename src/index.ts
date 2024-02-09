@@ -1,7 +1,7 @@
 import cors from "cors";
 import express from "express";
-
 import path from "path";
+
 import defaultConfig from "./config/default.config";
 import connectDB from "./services/db.service";
 import routes from "./routes";

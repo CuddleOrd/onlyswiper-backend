@@ -1,4 +1,5 @@
 import { connect } from "mongoose";
+
 import defaultConfig from "../config/default.config";
 
 const connectDB = () => {
