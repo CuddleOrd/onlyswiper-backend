@@ -9,7 +9,12 @@ import routes from "./routes";
 const app = express();
 
 // Cors configuration
-const allowedOrigins = [defaultConfig.app.frontend];
+const allowedOrigins = [
+  "https://onlyfansfinder-ai.vercel.app",
+  "https://www.onlyswiper.com",
+  "https://onlyswiper.com",
+  defaultConfig.app.frontend
+];
 app.use(
   cors({
     origin: (origin, callback) => {
