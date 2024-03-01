@@ -6,6 +6,7 @@ import httpStatus from "http-status";
 
 import { User } from "../models/user.model";
 import { GENDERS, USER_ROLES, USER_STATUS } from "../utils/const.util";
+import { Favorite } from "../models/favorite.model";
 
 /**
  * Search
@@ -15,7 +16,7 @@ import { GENDERS, USER_ROLES, USER_STATUS } from "../utils/const.util";
  * @param _next
  */
 async function search(req: Request, res: Response, next: NextFunction) {
-  const { keyword, params } = req.body;
+  const { keyword, includeFavorite, params } = req.body;
 
   try {
     const query: Record<string, any> = {
@@ -24,6 +25,19 @@ async function search(req: Request, res: Response, next: NextFunction) {
 
     if (keyword) {
       query.name = new RegExp(keyword);
+    }
+
+    if (!includeFavorite) {
+      if (req.user) {
+        const { _id: userId } = req.user;
+
+        const favorite = await Favorite.findOne({ userId });
+        let favoriteIds = await User.find({
+          _id: { $in: favorite?.creatorId }
+        }).select("_id");
+        favoriteIds = favoriteIds.map((item: any) => item._id);
+        query._id = { $nin: favoriteIds };
+      }
     }
 
     for (let i = 0; i < params.length; i++) {
