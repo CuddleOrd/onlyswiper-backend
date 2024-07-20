@@ -28,8 +28,8 @@ async function login(req: Request, res: Response, next: NextFunction) {
   const { email, password } = req.body;
 
   try {
-    const user: IUser = await User.findOne({ email }).select("+password");
-    // const user: any = await User.findOne({ email }).select("+password");
+    // const user: IUser = await User.findOne({ email }).select("+password");
+    const user: any = await User.findOne({ email }).select("+password");
 
     if (
       user &&
