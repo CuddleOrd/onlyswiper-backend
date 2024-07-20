@@ -28,8 +28,8 @@ async function login(req: Request, res: Response, next: NextFunction) {
   const { email, password } = req.body;
 
   try {
-    // const user: IUser = await User.findOne({ email }).select("+password");
-    const user: any = await User.findOne({ email }).select("+password");
+    const user: IUser = await User.findOne({ email }).select("+password");
+    // const user: any = await User.findOne({ email }).select("+password");
 
     if (
       user &&
@@ -44,9 +44,14 @@ async function login(req: Request, res: Response, next: NextFunction) {
       expiry.setHours(
         expiry.getHours() + defaultConfig.jwt.refresh.expiry_hour
       );
+    //   const refreshToken = new RefreshToken({
+    //     userId: user._id,
+    //     token: user.generateRefreshToken(),
+    //     expiry
+    //   });
       const refreshToken = new RefreshToken({
+          token: user.generateRefreshToken(),
         userId: user._id,
-        token: user.generateRefreshToken(),
         expiry
       });
       await refreshToken.save();
