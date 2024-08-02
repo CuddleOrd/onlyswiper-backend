@@ -18,6 +18,9 @@ import { Favorite } from "../models/favorite.model";
 async function search(req: Request, res: Response, next: NextFunction) {
   const { keyword, includeFavorite, pagination, params } = req.body;
 
+  console.log(req.body)
+
+
   try {
     const query: Record<string, any> = {
       role: USER_ROLES.CREATOR
@@ -68,7 +71,7 @@ async function search(req: Request, res: Response, next: NextFunction) {
           }
           break;
 
-        case "Gender":
+        case "Gendere":
           switch (one.condition.value) {
             case "all":
               break;
@@ -155,6 +158,7 @@ async function search(req: Request, res: Response, next: NextFunction) {
       .sort({ likes: "desc", pictures: "desc", videos: "desc" })
       .skip((pagination - 1) * 50)
       .limit(50);
+      console.log(result)
 
     res.status(httpStatus.OK).json({ success: true, result });
   } catch (error) {

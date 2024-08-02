@@ -30,6 +30,7 @@
     "start": "nodemon ./dist/index.js",
     "build": "tsc",
     "seed-dev": "ts-node-dev ./src/seeders/index.ts",
+    "seed-scrap": "ts-node-dev ./src/seeders/scrap.ts",
     "seed-prod": "node ./dist/seeders/index.js",
     "prettier-fix": "prettier --write src/**/*.ts",
     "lint": "eslint src/**/*.ts",
