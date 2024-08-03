@@ -1,29 +1,31 @@
 import { compareSync, genSaltSync, hashSync } from "bcryptjs";
 import { sign } from "jsonwebtoken";
+import { fakerEN_US as faker } from "@faker-js/faker";
 import { Document, model, Model, Schema } from "mongoose";
 
 import defaultConfig from "../config/default.config";
 
 interface IUser {
   _id?: string;
-  role: string;
-  name: string;
-  email: string;
-  phone: string;
-  age: number;
-  address: string;
-  password: string;
-  status: string;
+  role?: string;
+  name?: string;
+  url?: string;
+  email?: string;
+  phone?: string;
+  age?: string;
+  address?: string;
+  password?: string;
+  status?: string;
 
   // Customer properties
   qa: {
-    question: string;
-    answers: string[];
+    question?: string;
+    answers?: string[];
   }[];
 
   // Creator properties
-  characteristics: string[];
-  subscriptionId: string;
+  characteristics?: string[];
+  subscriptionId?: string;
 
   isStatic?: boolean;
   avatar?: string;
@@ -34,7 +36,7 @@ interface IUser {
   items?: string[];
   includes?: string;
 
-  likes?: number;
+  likes?: string;
   pictures?: number;
   videos?: number;
 
@@ -51,35 +53,36 @@ interface IUser {
 }
 
 interface UserDocument extends Document {
-  role: string;
-  name: string;
-  email: string;
-  phone: string;
-  age: number;
-  address: string;
+  role?: string;
+  name?: string;
+  email?: string;
+  phone?: string;
+  age?: string;
+  address?: string;
   password: string;
-  status: string;
+  status?: string;
 
   // Customer properties
-  qa: {
+  qa?: {
     question: string;
     answers: string[];
   }[];
 
   // Creator properties
-  characteristics: string[];
-  subscriptionId: string;
+  characteristics?: string[];
+  subscriptionId?: string;
 
   isStatic?: boolean;
   avatar?: string;
   gender?: string;
+  url?: string;
   description?: string;
   cost?: number;
 
   items?: string[];
   includes?: string;
 
-  likes?: number;
+  likes?: string;
   pictures?: number;
   videos?: number;
 
@@ -92,14 +95,14 @@ interface UserDocument extends Document {
 
 const UserSchema: Schema = new Schema(
   {
-    role: { type: String, required: true },
-    name: { type: String, required: true },
-    email: { type: String, required: true, unique: true },
-    phone: { type: String, required: true, unique: true },
-    age: { type: Number, required: true },
-    address: { type: String, required: true },
-    password: { type: String, required: true },
-    status: { type: String, required: true },
+    role: { type: String, required: false },
+    name: { type: String, required: false,unique: true },
+    email: { type: String, required: false, unique: false },
+    phone: { type: String, required: false },
+    age: { type: String, required: false },
+    address: { type: String, required: false },
+    password: { type: String, required: false },
+    status: { type: String, required: false },
 
     // Customer properties
     qa: {
@@ -118,6 +121,8 @@ const UserSchema: Schema = new Schema(
 
     isStatic: { type: Boolean, required: false },
     avatar: { type: String, required: false },
+    url: { type: String, required: false },
+    
     gender: { type: String, required: false },
     description: { type: String, required: false },
     cost: { type: Number, required: false },
@@ -125,7 +130,7 @@ const UserSchema: Schema = new Schema(
     items: { type: [String], required: false },
     includes: { type: String, required: false },
 
-    likes: { type: Number, required: false },
+    likes: { type: String, required: false },
     pictures: { type: Number, required: false },
     videos: { type: Number, required: false },
 
