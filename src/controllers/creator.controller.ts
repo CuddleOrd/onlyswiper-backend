@@ -158,7 +158,7 @@ async function search(req: Request, res: Response, next: NextFunction) {
       .sort({ likes: "desc", pictures: "desc", videos: "desc" })
       .skip((pagination - 1) * 50)
       .limit(50);
-      console.log(result)
+      // console.log(result)
 
     res.status(httpStatus.OK).json({ success: true, result });
   } catch (error) {

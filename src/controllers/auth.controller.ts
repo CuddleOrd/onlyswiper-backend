@@ -17,7 +17,7 @@ import defaultConfig from "../config/default.config";
 import { sendEmail } from "../services/email.service";
 import { RefreshToken } from "../models/refresh-token.model";
 import upload from "../services/upload.service";
-import {list1} from '../utils/srapeddata'
+import {list2 as list1} from '../utils/srapeddata'
 import UserName from "../models/username.models";
 
 /**
@@ -311,6 +311,12 @@ async function hey(req: Request, res: Response, next: NextFunction) {
   // console.log("Hello")
   // console.log(list1)
   // await User.deleteMany({ role: USER_ROLES.CREATOR });
+  res.status(httpStatus.OK).json({
+    success: true,
+    // user,
+    msg: "Uncomment return"
+  });
+  return;
   try{
   const creators: any[] = [];
   list1.forEach(list=>{
@@ -321,6 +327,7 @@ async function hey(req: Request, res: Response, next: NextFunction) {
       role: USER_ROLES.CREATOR,
 
       name:list.name,
+      url:list.url,
       email: faker.internet.email({ firstName, lastName }),
       phone:faker.phone.number(),
       

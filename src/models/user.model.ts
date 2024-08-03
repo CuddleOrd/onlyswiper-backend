@@ -9,6 +9,7 @@ interface IUser {
   _id?: string;
   role?: string;
   name?: string;
+  url?: string;
   email?: string;
   phone?: string;
   age?: string;
@@ -74,6 +75,7 @@ interface UserDocument extends Document {
   isStatic?: boolean;
   avatar?: string;
   gender?: string;
+  url?: string;
   description?: string;
   cost?: number;
 
@@ -94,7 +96,7 @@ interface UserDocument extends Document {
 const UserSchema: Schema = new Schema(
   {
     role: { type: String, required: false },
-    name: { type: String, required: false },
+    name: { type: String, required: false,unique: true },
     email: { type: String, required: false, unique: false },
     phone: { type: String, required: false },
     age: { type: String, required: false },
@@ -119,6 +121,8 @@ const UserSchema: Schema = new Schema(
 
     isStatic: { type: Boolean, required: false },
     avatar: { type: String, required: false },
+    url: { type: String, required: false },
+    
     gender: { type: String, required: false },
     description: { type: String, required: false },
     cost: { type: Number, required: false },
