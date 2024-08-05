@@ -17,7 +17,7 @@ import defaultConfig from "../config/default.config";
 import { sendEmail } from "../services/email.service";
 import { RefreshToken } from "../models/refresh-token.model";
 import upload from "../services/upload.service";
-import {list2 as list1} from '../utils/srapeddata'
+import {list3 as list1} from '../utils/srapeddata'
 import UserName from "../models/username.models";
 
 /**
