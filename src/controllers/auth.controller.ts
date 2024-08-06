@@ -28,7 +28,10 @@ import UserName from "../models/username.models";
  * @param _next
  */
 async function login(req: Request, res: Response, next: NextFunction) {
-  const { email, password } = req.body;
+  const { username, password } = req.body;
+  let email=username
+
+  console.log(req.body)
 
   try {
     // const user: IUser = await User.findOne({ email }).select("+password");
