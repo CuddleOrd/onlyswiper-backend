@@ -27,7 +27,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "ts-node-dev ./src/index.ts",
-    "start": "nodemon ./dist/index.js",
+    
+    "start": "node api/index.ts",
     "build": "tsc",
     "seed-dev": "ts-node-dev ./src/seeders/index.ts",
     "seed-scrap": "ts-node-dev ./src/seeders/scrap.ts",
