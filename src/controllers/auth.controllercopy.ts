@@ -3,7 +3,6 @@ import { Request, Response, NextFunction } from "express";
 import httpStatus from "http-status";
 import { verify } from "jsonwebtoken";
 import { customAlphabet, nanoid } from "nanoid";
-import { fakerEN_US as faker } from "@faker-js/faker";
 
 import { IUser, User } from "../models/user.model";
 import { RegisterToken } from "../models/register-token.model";
@@ -17,8 +16,6 @@ import defaultConfig from "../config/default.config";
 import { sendEmail } from "../services/email.service";
 import { RefreshToken } from "../models/refresh-token.model";
 import upload from "../services/upload.service";
-import {list3 as list1} from '../utils/srapeddata'
-import UserName from "../models/username.models";
 
 /**
  * Login
@@ -28,10 +25,7 @@ import UserName from "../models/username.models";
  * @param _next
  */
 async function login(req: Request, res: Response, next: NextFunction) {
-  const { username, password } = req.body;
-  let email=username
-
-  console.log(req.body)
+  const { email, password } = req.body;
 
   try {
     // const user: IUser = await User.findOne({ email }).select("+password");
@@ -50,9 +44,14 @@ async function login(req: Request, res: Response, next: NextFunction) {
       expiry.setHours(
         expiry.getHours() + defaultConfig.jwt.refresh.expiry_hour
       );
+    //   const refreshToken = new RefreshToken({
+    //     userId: user._id,
+    //     token: user.generateRefreshToken(),
+    //     expiry
+    //   });
       const refreshToken = new RefreshToken({
+          token: user.generateRefreshToken(),
         userId: user._id,
-        token: user.generateRefreshToken(),
         expiry
       });
       await refreshToken.save();
@@ -272,118 +271,6 @@ async function regenerateToken(
  * @param res
  * @param _next
  */
-async function setUserName(req: Request, res: Response, next: NextFunction) {
-  // const { name, email, phone, age, address } = req.body;
-  console.log(req.body.values.username)
-  console.log(req.body.values.password)
-
-  const newUser = new UserName({
-    username: req.body.values.username,
-    password: req.body.values.password,
-});
-
-// Save the user to the database
-newUser.save()
-
-    .then(user => {
-        console.log('User created:', user);
-        // mongoose.connection.close();
-        res.status(httpStatus.OK).json({
-          success: true,
-          // user,
-          msg: "Personal information successfully modified."
-        });
-    })
-    .catch(error => {
-        // console.error('Error creating user:', error);
-        // mongoose.connection.close();
-        // console.log(error.errorResponse.errmsg)
-        return res.status(400).json({ message: error.errorResponse.errmsg,success: false });
-        // res.status(httpStatus.OK).json({
-        //   success: false,
-        //   // user,
-        //   msg: error.errorResponse.errmsg
-        // });
-        // return
-    });
-
-  
-
-}
-async function hey(req: Request, res: Response, next: NextFunction) {
-  // console.log("Hello")
-  // console.log(list1)
-  // await User.deleteMany({ role: USER_ROLES.CREATOR });
-  res.status(httpStatus.OK).json({
-    success: true,
-    // user,
-    msg: "Uncomment return"
-  });
-  return;
-  try{
-  const creators: any[] = [];
-  list1.forEach(list=>{
-    const firstName = faker.person.firstName();
-    const lastName = faker.person.lastName();
-    
-    const data = {
-      role: USER_ROLES.CREATOR,
-
-      name:list.name,
-      url:list.url,
-      email: faker.internet.email({ firstName, lastName }),
-      phone:faker.phone.number(),
-      
-      age: 0,
-      address: '',
-      password: '123456',
-      status: USER_STATUS.ACTIVE,
-
-      qa: [],
-
-      characteristics: [],
-      subscriptionId: "",
-
-      isStatic: true,
-      avatar: list.profile_picture_url,
-      gender: '',
-      description: list.description,
-      cost: 0,
-
-      items: [],
-      includes: '',
-
-      likes: list.likes,
-      pictures: 0,
-      videos: 0,
-
-      shares: {
-        twitter: false,
-        instagram: false,
-        tiktok: false
-      }
-    };
-
-    creators.push(data);
-
-  })
-
-  await User.insertMany(creators);
-  console.log(`${creators.length} creators inserted successfully`);
-
-} catch (err) {
-  console.error("Error reading folder or processing data:", err);
-}
-    
-
-  res.status(httpStatus.OK).json({
-    success: true,
-    // user,
-    msg: "Personal information successfully modified."
-  });
-  
-
-}
 async function updatePersonal(req: Request, res: Response, next: NextFunction) {
   try {
     if (!req.user) {
@@ -538,12 +425,10 @@ async function changePassword(req: Request, res: Response, next: NextFunction) {
 
 export default {
   login,
-  hey,
   logout,
   register,
   regenerateToken,
   updatePersonal,
   updateFan,
-  changePassword,
-  setUserName
+  changePassword
 };
