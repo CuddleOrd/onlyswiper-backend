@@ -13,6 +13,7 @@ const allowedOrigins = [
   "https://onlyfansfinder-ai.vercel.app",
   "https://www.onlyswiper.com",
   "https://onlyswiper.com",
+  "https://onlyfansfinder-ai-theta.vercel.app",
   defaultConfig.app.frontend
 ];
 app.use(

@@ -27,15 +27,18 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "ts-node-dev ./src/index.ts",
-    
-    "start": "node api/index.ts",
-    "build": "tsc",
+    "start": "nodemon src/index.ts",
+    "build": "rimraf dist && tsc",
+    "ts.check": "tsc --project tsconfig.json",
     "seed-dev": "ts-node-dev ./src/seeders/index.ts",
     "seed-scrap": "ts-node-dev ./src/seeders/scrap.ts",
     "seed-prod": "node ./dist/seeders/index.js",
     "prettier-fix": "prettier --write src/**/*.ts",
     "lint": "eslint src/**/*.ts",
-    "lint-fix": "eslint src/**/*.ts --fix"
+    "lint-fix": "eslint src/**/*.ts --fix",
+    "add-build": "git add dist"
+  
+
   },
   "dependencies": {
     "@faker-js/faker": "^8.4.0",
@@ -81,9 +84,15 @@
     "eslint-plugin-standard": "^5.0.0",
     "husky": "^8.0.3",
     "nodemon": "^3.0.1",
+    "pre-commit": "^1.2.2",
     "prettier": "^3.1.0",
     "ts-node": "^10.9.1",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.3.2"
-  }
+  },
+  "pre-commit": [
+      "ts.check",
+      "build",
+      "add-build"
+  ]
 }
