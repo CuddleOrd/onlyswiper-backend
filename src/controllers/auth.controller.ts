@@ -116,7 +116,8 @@ async function register(req: Request, res: Response, next: NextFunction) {
     qa,
     characteristics,
     subscriptionId,
-    password
+    password,
+    type
   } = req.body;
 
   try {
@@ -529,7 +530,7 @@ async function changePassword(req: Request, res: Response, next: NextFunction) {
       success: true,
       msg: "Password successfully changed."
     });
-  } catch (error) {
+  } catch (error) { 
     console.error("auth.controller changePassword error: ", error);
   } finally {
     next();
