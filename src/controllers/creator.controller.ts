@@ -18,8 +18,7 @@ import { Favorite } from "../models/favorite.model";
 async function search(req: Request, res: Response, next: NextFunction) {
   const { keyword, includeFavorite, pagination, params } = req.body;
 
-  console.log(req.body)
-
+  console.log(req.body);
 
   try {
     const query: Record<string, any> = {
@@ -157,9 +156,9 @@ async function search(req: Request, res: Response, next: NextFunction) {
     const result = await User.find(query)
       .sort({ likes: "desc", pictures: "desc", videos: "desc" })
       .skip((pagination - 1) * 50)
-      // reduce count 
+      // reduce count
       .limit(15);
-      // console.log(result)
+    // console.log(result)
 
     res.status(httpStatus.OK).json({ success: true, result });
   } catch (error) {
