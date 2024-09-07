@@ -9,33 +9,29 @@ import routes from "./routes";
 const app = express();
 
 // Cors configuration
-// const allowedOrigins = [
-//   "https://onlyfansfinder-ai.vercel.app",
-//   "https://www.onlyswiper.com",
-//   "https://onlyswiper.com",
-//   defaultConfig.app.frontend
-// ];
+const allowedOrigins = [
+  "https://onlyfansfinder-ai.vercel.app",
+  "https://www.onlyswiper.com",
+  "https://onlyswiper.com",
+  "clear-kindly-marmoset.ngrok-free.app",
+  defaultConfig.app.frontend
+];
 
 app.use(
-  cors(
-    {
-      origin: "*"
-    }
-    // {
-    // origin: (origin, callback) => {
-    //   if (!origin) return callback(null, true);
+  cors({
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true);
 
-    //   if (allowedOrigins.indexOf(origin) === -1) {
-    //     const msg =
-    //       "The CORS policy for this site does not allow access from the specified Origin.";
-    //     return callback(new Error(msg), false);
-    //   }
+      if (allowedOrigins.indexOf(origin) === -1) {
+        const msg =
+          "The CORS policy for this site does not allow access from the specified Origin.";
+        return callback(new Error(msg), false);
+      }
 
-    //   return callback(null, true);
-    // },
-    // credentials: true
-    // }
-  )
+      return callback(null, true);
+    },
+    credentials: true
+  })
 );
 
 // Parse request of content type
