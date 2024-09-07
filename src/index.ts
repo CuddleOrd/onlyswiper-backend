@@ -13,7 +13,7 @@ const allowedOrigins = [
   "https://onlyfansfinder-ai.vercel.app",
   "https://www.onlyswiper.com",
   "https://onlyswiper.com",
-  "clear-kindly-marmoset.ngrok-free.app",
+  "https://clear-kindly-marmoset.ngrok-free.app"
   defaultConfig.app.frontend
 ];
 
