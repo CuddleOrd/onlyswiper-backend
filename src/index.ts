@@ -15,6 +15,7 @@ const app = express();
 //   "https://onlyswiper.com",
 //   defaultConfig.app.frontend
 // ];
+
 app.use(
   cors(
     {
