@@ -157,6 +157,7 @@ async function search(req: Request, res: Response, next: NextFunction) {
     const result = await User.find(query)
       .sort({ likes: "desc", pictures: "desc", videos: "desc" })
       .skip((pagination - 1) * 50)
+      // reduce count 
       .limit(15);
       // console.log(result)
 
