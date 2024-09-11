@@ -14,7 +14,7 @@ import { Favorite } from "../models/favorite.model";
  * @param req
  * @param res
  * @param _next
- */
+ **/
 async function search(req: Request, res: Response, next: NextFunction) {
   const { keyword, includeFavorite, pagination, params } = req.body;
 
@@ -70,7 +70,7 @@ async function search(req: Request, res: Response, next: NextFunction) {
           }
           break;
 
-        case "Gendere":
+        case "Gender":
           switch (one.condition.value) {
             case "all":
               break;
@@ -153,12 +153,14 @@ async function search(req: Request, res: Response, next: NextFunction) {
       }
     }
 
+    const page = Number(pagination) || 1;
+    const limit = 15;
+    const skip = (page - 1) * limit;
+
     const result = await User.find(query)
       .sort({ likes: "desc", pictures: "desc", videos: "desc" })
-      .skip((pagination - 1) * 50)
-      // reduce count
-      .limit(15);
-    // console.log(result)
+      .skip(skip)
+      .limit(limit);
 
     res.status(httpStatus.OK).json({ success: true, result });
   } catch (error) {
