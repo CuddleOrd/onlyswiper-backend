@@ -14,6 +14,7 @@ const allowedOrigins = [
   "https://www.onlyswiper.com",
   "https://onlyswiper.com",
   "https://clear-kindly-marmoset.ngrok-free.app",
+  "https://solid-icons-clean.loca.lt",
   defaultConfig.app.frontend
 ];
 
