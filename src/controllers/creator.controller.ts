@@ -154,13 +154,15 @@ async function search(req: Request, res: Response, next: NextFunction) {
     }
 
     const page = Number(pagination) || 1;
-    const limit = 15;
+    const limit = 10;
     const skip = (page - 1) * limit;
+    console.log({ query, skip, limit });
 
     const result = await User.find(query)
       .sort({ likes: "desc", pictures: "desc", videos: "desc" })
       .skip(skip)
       .limit(limit);
+    console.log(result, "result");
 
     res.status(httpStatus.OK).json({ success: true, result });
   } catch (error) {

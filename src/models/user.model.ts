@@ -1,6 +1,6 @@
 import { compareSync, genSaltSync, hashSync } from "bcryptjs";
 import { sign } from "jsonwebtoken";
-import { fakerEN_US as faker } from "@faker-js/faker";
+// import { fakerEN_US as faker } from "@faker-js/faker";
 import { Document, model, Model, Schema } from "mongoose";
 
 import defaultConfig from "../config/default.config";
@@ -122,7 +122,7 @@ const UserSchema: Schema = new Schema(
     isStatic: { type: Boolean, required: false },
     avatar: { type: String, required: false },
     url: { type: String, required: false },
-    
+
     gender: { type: String, required: false },
     description: { type: String, required: false },
     cost: { type: Number, required: false },
