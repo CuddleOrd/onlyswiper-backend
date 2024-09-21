@@ -70,7 +70,7 @@ async function search(req: Request, res: Response, next: NextFunction) {
           }
           break;
 
-        case "Gender":
+        case "Gender1":
           switch (one.condition.value) {
             case "all":
               break;

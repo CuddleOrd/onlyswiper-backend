@@ -15,6 +15,7 @@ const allowedOrigins = [
   "https://onlyswiper.com",
   "https://clear-kindly-marmoset.ngrok-free.app",
   "https://solid-icons-clean.loca.lt",
+  "https://onlyfansfinder-ai-theta.vercel.app",
   defaultConfig.app.frontend
 ];
 
