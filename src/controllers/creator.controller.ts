@@ -154,7 +154,7 @@ async function search(req: Request, res: Response, next: NextFunction) {
     }
 
     const page = Number(pagination) || 1;
-    const limit = 10;
+    const limit = 40;
     const skip = (page - 1) * limit;
     console.log({ query, skip, limit });
 
