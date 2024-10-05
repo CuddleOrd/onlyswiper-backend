@@ -16,6 +16,7 @@ const allowedOrigins = [
   "https://clear-kindly-marmoset.ngrok-free.app",
   "https://solid-icons-clean.loca.lt",
   "https://onlyfansfinder-ai-theta.vercel.app",
+  "http://188.40.183.252",
   defaultConfig.app.frontend
 ];
 
