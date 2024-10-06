@@ -17,6 +17,7 @@ const allowedOrigins = [
   "https://solid-icons-clean.loca.lt",
   "https://onlyfansfinder-ai-theta.vercel.app",
   "http://188.40.183.252",
+  "http://188.40.183.252:4041",
   defaultConfig.app.frontend
 ];
 
