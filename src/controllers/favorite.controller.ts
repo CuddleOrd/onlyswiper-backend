@@ -3,6 +3,7 @@ import httpStatus from "http-status";
 
 import { User } from "../models/user.model";
 import { Favorite } from "../models/favorite.model";
+import SwipeModel from "../models/swipes.model";
 
 /**
  * Get
@@ -97,9 +98,50 @@ async function dislike(req: Request, res: Response, next: NextFunction) {
     next();
   }
 }
+async function fetchSwipesById(req: Request, res: Response, next: NextFunction) {
+  // const { user,swipes } = req.body;
+  const { user } = req.body;
+  console.log(user)
+
+    try {
+        const swipes = await SwipeModel.findOne({ user });
+
+        if (swipes) {
+            res.status(200).json({swipes,code:1 }); // Return the like entry
+        } else {
+            res.status(200).json({ message: 'No like entry found for unique ID',code:0,swipes }); // Not found
+        }
+    } catch (error) {
+        console.error('Error fetching like entry:', error);
+        res.status(500).json({ message: 'Internal Server Error' }); // Server error
+    }
+}
+async function saveSwipe(req: Request, res: Response, next: NextFunction) {
+  const { user,swipes } = req.body;
+
+  try {
+    const updatedLike = await SwipeModel.findOneAndUpdate(
+        { user }, // Search by uniqueId
+        { $set: { swipes } }, // Update likes
+        { new: true, upsert: true } // Options: return the updated document, create if it doesn't exist
+    );
+
+    console.log('Like entry created or updated:', updatedLike);
+} catch (error) {
+    console.error('Error creating or updating like entry:', error);
+}
+
+  console.log(req.body);
+  res
+  .status(httpStatus.OK)
+  .json({ success: true, msg: "Swipes saved" });
+}
+
 
 export default {
   get,
   like,
-  dislike
+  dislike,
+  saveSwipe,
+  fetchSwipesById
 };
