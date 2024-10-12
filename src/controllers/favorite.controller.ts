@@ -98,12 +98,56 @@ async function dislike(req: Request, res: Response, next: NextFunction) {
     next();
   }
 }
+async function saveSwipe(req: Request, res: Response, next: NextFunction) {
+  // console.log(req.user)
+  try {
+    if (!req.user) {
+      
+      return;
+    }
+
+    console.log("You're here!@2.")
+
+    const { swipes } = req.body;
+    console.log(swipes)
+    const { _id: user } = req.user;
+    console.log(user)
+    // let swipes=10
+
+    const updatedLike = await SwipeModel.findOneAndUpdate(
+      { user }, // Search by uniqueId
+      { $set: { swipes } }, // Update likes
+      { new: true, upsert: true } // Options: return the updated document, create if it doesn't exist
+  );
+
+  console.log('Like entry created or updated:', updatedLike);
+
+    // const update = { $pull: { creatorId } };
+
+    // await Favorite.findOneAndUpdate({ userId }, update, {
+    //   new: true,
+    //   upsert: true
+    // });
+
+    res
+      .status(httpStatus.OK)
+      .json({ success: true, msg: "You disliked a creator" });
+  } catch (error) {
+    console.error("favorite.controller dislike error: ", error);
+  } finally {
+    next();
+  }
+}
 async function fetchSwipesById(req: Request, res: Response, next: NextFunction) {
   // const { user,swipes } = req.body;
-  const { user } = req.body;
-  console.log(user)
+  if (!req.user) {
+      
+    return;
+  }
+  
 
     try {
+      const { _id: user } = req.user;
         const swipes = await SwipeModel.findOne({ user });
 
         if (swipes) {
@@ -116,8 +160,19 @@ async function fetchSwipesById(req: Request, res: Response, next: NextFunction) 
         res.status(500).json({ message: 'Internal Server Error' }); // Server error
     }
 }
-async function saveSwipe(req: Request, res: Response, next: NextFunction) {
+async function saveSwipe1(req: Request, res: Response, next: NextFunction) {
+
+  if (!req.user) {
+    res
+  .status(httpStatus.OK)
+  .json({ success: true, msg: "Not logged in" });
+    return;
+  }
   const { user,swipes } = req.body;
+  const { _id: userId } = req.user;
+
+  console.log(userId)
+  console.log("You're good to go")
 
   try {
     const updatedLike = await SwipeModel.findOneAndUpdate(
