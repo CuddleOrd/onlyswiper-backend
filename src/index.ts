@@ -18,6 +18,7 @@ const allowedOrigins = [
   "https://onlyfansfinder-ai-theta.vercel.app",
   "http://188.40.183.252",
   "http://188.40.183.252:4041",
+  "https://staging.onlyswiper.com",
   defaultConfig.app.frontend
 ];
 
