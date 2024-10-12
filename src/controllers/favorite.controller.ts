@@ -99,20 +99,23 @@ async function dislike(req: Request, res: Response, next: NextFunction) {
   }
 }
 async function saveSwipe(req: Request, res: Response, next: NextFunction) {
+  // console.log(req.user)
   try {
     if (!req.user) {
-      console.log("You're here!@1.")
+      
       return;
     }
 
     console.log("You're here!@2.")
 
     const { swipes } = req.body;
-    const { _id: userId } = req.user;
+    console.log(swipes)
+    const { _id: user } = req.user;
+    console.log(user)
     // let swipes=10
 
     const updatedLike = await SwipeModel.findOneAndUpdate(
-      { userId }, // Search by uniqueId
+      { user }, // Search by uniqueId
       { $set: { swipes } }, // Update likes
       { new: true, upsert: true } // Options: return the updated document, create if it doesn't exist
   );
@@ -137,10 +140,14 @@ async function saveSwipe(req: Request, res: Response, next: NextFunction) {
 }
 async function fetchSwipesById(req: Request, res: Response, next: NextFunction) {
   // const { user,swipes } = req.body;
-  const { user } = req.body;
-  console.log(user)
+  if (!req.user) {
+      
+    return;
+  }
+  
 
     try {
+      const { _id: user } = req.user;
         const swipes = await SwipeModel.findOne({ user });
 
         if (swipes) {
