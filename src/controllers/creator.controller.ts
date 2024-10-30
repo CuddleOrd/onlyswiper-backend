@@ -159,7 +159,8 @@ async function search(req: Request, res: Response, next: NextFunction) {
     console.log({ query, skip, limit });
 
     const result = await User.find(query)
-      .sort({ likes: "desc", pictures: "desc", videos: "desc" })
+      // .sort({ likes: "desc", pictures: "desc", videos: "desc" })
+      .sort({ preference: 1 })
       .skip(skip)
       .limit(limit);
     console.log(result, "result");
