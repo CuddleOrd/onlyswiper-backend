@@ -73,6 +73,31 @@ async function like(req: Request, res: Response, next: NextFunction) {
  * @param next
  * @returns
  */
+async function saveModel(req: Request, res: Response, next: NextFunction) {
+  try {
+    if (!req.user) {
+      return;
+    }
+    const { description	,name	,file_name	 } = req.body;
+    const newUser = new User({
+      name: 'John Doe',
+      email: 'john.doe@example.com',
+      age: 30
+    });
+    newUser.save()
+  .then(user => {
+    console.log('User saved:', user);
+  })
+  .catch(error => {
+    console.error('Error saving user:', error);
+  });
+    console.log(description)
+  }catch (error) {
+    console.error("favorite.controller dislike error: ", error);
+  } finally {
+    next();
+  }
+}
 async function dislike(req: Request, res: Response, next: NextFunction) {
   try {
     if (!req.user) {
@@ -198,5 +223,6 @@ export default {
   like,
   dislike,
   saveSwipe,
-  fetchSwipesById
+  fetchSwipesById,
+  saveModel
 };
