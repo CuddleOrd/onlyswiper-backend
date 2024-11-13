@@ -8,6 +8,7 @@ import defaultConfig from "../config/default.config";
 interface IUser {
   _id?: string;
   role?: string;
+  preference?: number;
   name?: string;
   url?: string;
   email?: string;
@@ -54,7 +55,9 @@ interface IUser {
 
 interface UserDocument extends Document {
   role?: string;
+  
   name?: string;
+  preference?: number;
   email?: string;
   phone?: string;
   age?: string;
@@ -96,7 +99,8 @@ interface UserDocument extends Document {
 const UserSchema: Schema = new Schema(
   {
     role: { type: String, required: false },
-    name: { type: String, required: false },
+    name: { type: String, required: false,unique: false },
+    preference: { type: Number, required: false },
     email: { type: String, required: false, unique: false },
     phone: { type: String, required: false },
     age: { type: String, required: false },

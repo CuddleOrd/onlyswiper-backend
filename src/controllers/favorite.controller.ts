@@ -4,6 +4,8 @@ import httpStatus from "http-status";
 import { User } from "../models/user.model";
 import { Favorite } from "../models/favorite.model";
 import SwipeModel from "../models/swipes.model";
+import { GENDERS, USER_ROLES, USER_STATUS } from "../utils/const.util";
+import { fakerEN_US as faker } from "@faker-js/faker";
 
 /**
  * Get
@@ -78,22 +80,44 @@ async function saveModel(req: Request, res: Response, next: NextFunction) {
     if (!req.user) {
       return;
     }
+    const strCurTime = new Date().getTime().toString();
     const { description	,name	,file_name	 } = req.body;
     const newUser = new User({
-      name: 'John Doe',
-      email: 'john.doe@example.com',
-      age: 30
+      role: USER_ROLES.CREATOR,
+      name: name,
+      email: `${name ?? ""}.${strCurTime}@offai.com`,
+      preference: 1.5,
+      gender:'Female',
+      phone: faker.phone.number(),
+      description:description,
+      avatar:file_name,
+      password: faker.internet.password(),
+      status: USER_STATUS.ACTIVE,
+      likes: 0,
+      pictures:  0,
+      videos:  0,
+
+
     });
     newUser.save()
   .then(user => {
     console.log('User saved:', user);
+    
   })
   .catch(error => {
     console.error('Error saving user:', error);
+   
   });
     console.log(description)
+    res
+      .status(httpStatus.OK)
+      .json({ success: true, msg: "Saved Successfully" });
+    
   }catch (error) {
     console.error("favorite.controller dislike error: ", error);
+    // return res
+    //   .status(500)
+    //   .json({ success: true, msg: "Error saving" });
   } finally {
     next();
   }
