@@ -92,34 +92,61 @@ async function saveModel(req: Request, res: Response, next: NextFunction) {
     const strCurTime = new Date().getTime().toString();
     const { _id: userId } = req.user;
     const { description	,likes,name	,profile_picture,profile_picture_url,profile_video,url	 } = req.body;
-    const newUser = new User({
-      role: USER_ROLES.CREATOR,
-      user_id:userId,
-      name: name,
-      email: `${name ?? ""}.${strCurTime}@offai.com`,
-      preference: 1.5,
-      gender:'Female',
-      phone: faker.phone.number(),
-      description:description,
-      avatar:profile_picture_url,
-      password: faker.internet.password(),
-      status: USER_STATUS.ACTIVE,
-      likes: likes,
-      pictures:  profile_picture,
-      videos:  profile_video,
-      url:url
+
+    const updatedLike = await User.findOneAndUpdate(
+      { _id:userId }, // Search by uniqueId
+      { $set: { 
+        name: name,
+        // email: `${name ?? ""}.${strCurTime}@offai.com`,
+        preference: 1.5,
+        gender:'Female',
+        phone: faker.phone.number(),
+        description:description,
+        avatar:profile_picture_url,
+        password: faker.internet.password(),
+        status: USER_STATUS.ACTIVE,
+        likes: likes,
+        pictures:  profile_picture,
+        videos:  profile_video,
+        url:url
+       } }, // Update likes
+      { new: true, upsert: true } // Options: return the updated document, create if it doesn't exist
+  );
 
 
-    });
-    newUser.save()
-  .then(user => {
-    console.log('User saved:', user);
+
+
+  
+
+
+  //   const newUser = new User({
+  //     role: USER_ROLES.CREATOR,
+  //     user_id:userId,
+  //     name: name,
+  //     email: `${name ?? ""}.${strCurTime}@offai.com`,
+  //     preference: 1.5,
+  //     gender:'Female',
+  //     phone: faker.phone.number(),
+  //     description:description,
+  //     avatar:profile_picture_url,
+  //     password: faker.internet.password(),
+  //     status: USER_STATUS.ACTIVE,
+  //     likes: likes,
+  //     pictures:  profile_picture,
+  //     videos:  profile_video,
+  //     url:url
+
+
+  //   });
+  //   newUser.save()
+  // .then(user => {
+  //   console.log('User saved:', user);
     
-  })
-  .catch(error => {
-    console.error('Error saving user:', error);
+  // })
+  // .catch(error => {
+  //   console.error('Error saving user:', error);
    
-  });
+  // });
     console.log(description)
     res
       .status(httpStatus.OK)
