@@ -81,7 +81,7 @@ async function saveModel(req: Request, res: Response, next: NextFunction) {
       return;
     }
 
-  //  let all_record= req.body;
+   let all_record= req.body;
 
 
   //  console.log("all_record")
@@ -93,12 +93,17 @@ async function saveModel(req: Request, res: Response, next: NextFunction) {
     const { _id: userId } = req.user;
     const { description	,likes,name	,profile_picture,profile_picture_url,profile_video,url	 } = req.body;
 
+
+    // console.log("all_record")
+    // console.log(all_record)
+    
+
     const updatedLike = await User.findOneAndUpdate(
       { _id:userId }, // Search by uniqueId
       { $set: { 
         name: name,
         // email: `${name ?? ""}.${strCurTime}@offai.com`,
-        preference: 1.5,
+        preference: 101.5,
         gender:'Female',
         phone: faker.phone.number(),
         description:description,
@@ -147,7 +152,7 @@ async function saveModel(req: Request, res: Response, next: NextFunction) {
   //   console.error('Error saving user:', error);
    
   // });
-    console.log(description)
+    // console.log(description)
     res
       .status(httpStatus.OK)
       .json({ success: true, msg: "Saved Successfully" });
