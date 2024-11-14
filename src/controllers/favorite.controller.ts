@@ -80,22 +80,34 @@ async function saveModel(req: Request, res: Response, next: NextFunction) {
     if (!req.user) {
       return;
     }
+
+  //  let all_record= req.body;
+
+
+  //  console.log("all_record")
+  //  console.log(all_record)
+  //  res
+  //     .status(httpStatus.OK)
+  //     .json({ success: true, msg: "Saved Successfully" });
     const strCurTime = new Date().getTime().toString();
-    const { description	,name	,file_name	 } = req.body;
+    const { _id: userId } = req.user;
+    const { description	,likes,name	,profile_picture,profile_picture_url,profile_video,url	 } = req.body;
     const newUser = new User({
       role: USER_ROLES.CREATOR,
+      user_id:userId,
       name: name,
       email: `${name ?? ""}.${strCurTime}@offai.com`,
       preference: 1.5,
       gender:'Female',
       phone: faker.phone.number(),
       description:description,
-      avatar:file_name,
+      avatar:profile_picture_url,
       password: faker.internet.password(),
       status: USER_STATUS.ACTIVE,
-      likes: 0,
-      pictures:  0,
-      videos:  0,
+      likes: likes,
+      pictures:  profile_picture,
+      videos:  profile_video,
+      url:url
 
 
     });
