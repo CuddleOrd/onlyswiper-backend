@@ -91,7 +91,7 @@ async function saveModel(req: Request, res: Response, next: NextFunction) {
   //     .json({ success: true, msg: "Saved Successfully" });
     const strCurTime = new Date().getTime().toString();
     const { _id: userId } = req.user;
-    const { description	,likes,name	,profile_picture,profile_picture_url,profile_video,url	 } = req.body;
+    const { description	,likes,name	,profile_picture,profile_picture_url,profile_video,url,file_name	 } = req.body;
 
 
     // console.log("all_record")
@@ -107,7 +107,7 @@ async function saveModel(req: Request, res: Response, next: NextFunction) {
         gender:'Female',
         phone: faker.phone.number(),
         description:description,
-        avatar:profile_picture_url,
+        avatar:file_name,
         password: faker.internet.password(),
         status: USER_STATUS.ACTIVE,
         likes: likes,
