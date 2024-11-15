@@ -108,7 +108,7 @@ async function saveModel(req: Request, res: Response, next: NextFunction) {
         phone: faker.phone.number(),
         description:description,
         avatar:file_name,
-        password: faker.internet.password(),
+        
         status: USER_STATUS.ACTIVE,
         likes: likes,
         pictures:  profile_picture,
