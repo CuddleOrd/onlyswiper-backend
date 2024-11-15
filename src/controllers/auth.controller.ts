@@ -27,6 +27,29 @@ import UserName from "../models/username.models";
  * @param res
  * @param _next
  */
+
+async function getUser(req: Request, res: Response, next: NextFunction) {
+  try {
+    if (!req.user) {
+      return;
+    }
+    const { _id: userId } = req.user;
+    const user = await User.findById(userId);
+    res.status(httpStatus.OK).json({
+      user,
+      msg: "You logged in successfully."
+    });
+
+
+  }catch (error) {
+    console.error("favorite.controller dislike error: ", error);
+    // return res
+    //   .status(500)
+    //   .json({ success: true, msg: "Error saving" });
+  } finally {
+    next();
+  }
+}
 async function login(req: Request, res: Response, next: NextFunction) {
   const { username, password } = req.body;
   const email = username;
@@ -105,6 +128,8 @@ async function logout(req: Request, res: Response, next: NextFunction) {
  * @param res
  * @param _next
  */
+
+
 async function register(req: Request, res: Response, next: NextFunction) {
   const {
     role,
@@ -540,5 +565,6 @@ export default {
   updatePersonal,
   updateFan,
   changePassword,
-  setUserName
+  setUserName,
+  getUser
 };
