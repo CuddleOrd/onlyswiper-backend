@@ -15,6 +15,32 @@ import { Favorite } from "../models/favorite.model";
  * @param res
  * @param _next
  **/
+
+
+
+async function fetchUser(req: Request, res: Response, next: NextFunction) {
+
+  try {
+    
+    if (!req.user) {
+      return;
+      
+    }
+    const { _id: userId } = req.user;
+
+    const user = await User.findById(userId);
+    return res
+      .status(200)
+      .json({ success: true, msg: "User details" , user:user});
+  }catch (error) {
+    console.error("favorite.controller dislike error: ", error);
+    // return res
+    //   .status(500)
+    //   .json({ success: true, msg: "Error saving" });
+  } finally {
+    next();
+  }
+}
 async function search(req: Request, res: Response, next: NextFunction) {
   const { keyword, includeFavorite, pagination, params } = req.body;
 
@@ -258,5 +284,6 @@ async function batchCreateByScrapping(
 
 export default {
   search,
-  batchCreateByScrapping
+  batchCreateByScrapping,
+  fetchUser
 };
