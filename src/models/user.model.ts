@@ -17,6 +17,8 @@ interface IUser {
   address?: string;
   password?: string;
   status?: string;
+  boostedFrom?:string ,
+  boostedTo?: string,
 
   // Customer properties
   qa: {
@@ -64,6 +66,8 @@ interface UserDocument extends Document {
   address?: string;
   password: string;
   status?: string;
+  boostedFrom: Date | null;
+  boostedTo: Date | null;
 
   // Customer properties
   qa?: {
@@ -107,6 +111,8 @@ const UserSchema: Schema = new Schema(
     address: { type: String, required: false },
     password: { type: String, required: false },
     status: { type: String, required: false },
+    boostedFrom: { type: Date, default: null },
+  boostedTo: { type: Date, default: null },
 
     // Customer properties
     qa: {

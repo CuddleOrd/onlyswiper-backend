@@ -3,6 +3,7 @@
 import { fakerEN_US as faker } from "@faker-js/faker";
 import { Request, Response, NextFunction } from "express";
 import httpStatus from "http-status";
+import moment from 'moment';
 
 import { User } from "../models/user.model";
 import { GENDERS, USER_ROLES, USER_STATUS } from "../utils/const.util";
@@ -191,7 +192,19 @@ async function search(req: Request, res: Response, next: NextFunction) {
       .limit(limit);
     console.log(result, "result");
 
-    res.status(httpStatus.OK).json({ success: true, result });
+    // Current date using moment
+    const now = moment().toDate(); // Convert to a JavaScript Date object
+
+    // Query to find products where now is between boostedFrom and boostedTo
+    const boostedModels = await User.find({
+      boostedFrom: { $lte: now }, // boostedFrom <= now
+      boostedTo: { $gte: now },   // boostedTo >= now
+    });
+
+    // console.log('Currently Boosted Products:', boostedModels);
+    // return boostedProducts;
+
+    res.status(httpStatus.OK).json({ success: true, result,boostedModels });
   } catch (error) {
     console.error("creator.controller search error: ", error);
   } finally {
