@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import httpStatus from "http-status";
+import moment from 'moment';
 
 import { User } from "../models/user.model";
 import { Favorite } from "../models/favorite.model";
@@ -75,6 +76,52 @@ async function like(req: Request, res: Response, next: NextFunction) {
  * @param next
  * @returns
  */
+async function saveBoosts(req: Request, res: Response, next: NextFunction) {
+  try {
+    if (!req.user) {
+      return;
+    }
+    const { _id: userId } = req.user;
+    const model = await User.findById(userId);
+    if (!model) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+
+    const { boostDuration} = req.body;
+    // const now = new Date();
+    const now = moment(); // Moment object for the current date
+    const boostDuration1 = boostDuration === 'daily' ? 1 : 7; // 1 day or 7 days
+    const boostedFrom = now;
+//     const boostedTo = new Date(now.getTime()); // Clones the current date
+// boostedTo.setDate(boostedTo.getDate() + boostDuration); // Adds the boost duration
+// const boostedTo = new Date(now.getTime()); // Clone the Date object
+// boostedTo.setDate(boostedTo.getDate() + boostDuration);
+const boostedTo = now.clone().add(boostDuration, 'days');
+
+    // model.boostedFrom = boostedFrom;
+    // model.boostedTo = boostedTo;
+    model.boostedFrom = now.toDate(); // Convert Moment to JavaScript Date
+    model.boostedTo = boostedTo.toDate();
+
+    console.log(`Boosted From: ${boostedFrom}`);
+console.log(`Boosted To: ${boostedTo}`);
+
+    await model.save();
+
+    console.log()
+    res
+      .status(httpStatus.OK)
+      .json({ success: true, msg: "You Successfully purchased boost" });
+
+  }catch (error) {
+    console.error("favorite.controller dislike error: ", error);
+    // return res
+    //   .status(500)
+    //   .json({ success: true, msg: "Error saving" });
+  } finally {
+    next();
+  }
+}
 async function saveModel(req: Request, res: Response, next: NextFunction) {
   try {
     if (!req.user) {
@@ -292,5 +339,6 @@ export default {
   dislike,
   saveSwipe,
   fetchSwipesById,
-  saveModel
+  saveModel,
+  saveBoosts
 };
