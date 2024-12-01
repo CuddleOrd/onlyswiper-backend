@@ -20,6 +20,7 @@ const allowedOrigins = [
   "http://188.40.183.252:4041",
   "http://localhost:4041",
   "https://staging.onlyswiper.com",
+  "https://testsolana.roycelabs.xyz",
   defaultConfig.app.frontend
 ];
 
