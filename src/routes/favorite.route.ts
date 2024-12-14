@@ -13,5 +13,6 @@ router.post("/save-swipe", authMiddleware, favoriteController.saveSwipe);
 router.post("/save-boosts", authMiddleware, favoriteController.saveBoosts);
 router.post("/save-model", authMiddleware, favoriteController.saveModel);
 router.post("/fetch-user-swipes", authMiddleware, favoriteController.fetchSwipesById);
+router.post("/save-boosts-stripe", favoriteController.saveBoostsStripe);
 
 export default router;

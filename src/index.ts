@@ -21,6 +21,7 @@ const allowedOrigins = [
   "http://localhost:4041",
   "https://staging.onlyswiper.com",
   "https://testsolana.roycelabs.xyz",
+  "https://07e5-197-237-75-80.ngrok-free.app",
   defaultConfig.app.frontend
 ];
 
