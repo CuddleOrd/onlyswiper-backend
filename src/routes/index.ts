@@ -6,9 +6,20 @@ import favoriteRoutes from "./favorite.route";
 
 import { SITE_TITLE } from "../utils/const.util";
 
+import moment from 'moment';
 const router = express.Router();
 
 router.get("/", (_req: Request, res: Response, _next: NextFunction) => {
+//       const now = moment(); // Moment object for the current date
+
+//   const boostedFrom = now;
+
+// const boostedTo = now.clone().add(7, 'days');
+
+// console.log(boostedFrom)
+// console.log(boostedTo)
+
+    
   res.send(`😀 Welcome to the ${SITE_TITLE} API server!`);
 });
 
