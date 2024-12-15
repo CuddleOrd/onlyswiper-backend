@@ -99,12 +99,13 @@ async function saveBoostsStripe(req: Request, res: Response, next: NextFunction)
 // boostedTo.setDate(boostedTo.getDate() + boostDuration); // Adds the boost duration
 // const boostedTo = new Date(now.getTime()); // Clone the Date object
 // boostedTo.setDate(boostedTo.getDate() + boostDuration);
-const boostedTo = now.clone().add(boostDuration, 'days');
+const boostedTo = now.clone().add(boostDuration1, 'days');
 
     // model.boostedFrom = boostedFrom;
     // model.boostedTo = boostedTo;
     model.boostedFrom = now.toDate(); // Convert Moment to JavaScript Date
     model.boostedTo = boostedTo.toDate();
+    model.preference=2;
 
     console.log(`Boosted From: ${boostedFrom}`);
 console.log(`Boosted To: ${boostedTo}`);
@@ -145,12 +146,13 @@ async function saveBoosts(req: Request, res: Response, next: NextFunction) {
 // boostedTo.setDate(boostedTo.getDate() + boostDuration); // Adds the boost duration
 // const boostedTo = new Date(now.getTime()); // Clone the Date object
 // boostedTo.setDate(boostedTo.getDate() + boostDuration);
-const boostedTo = now.clone().add(boostDuration, 'days');
+const boostedTo = now.clone().add(boostDuration1, 'days');
 
     // model.boostedFrom = boostedFrom;
     // model.boostedTo = boostedTo;
     model.boostedFrom = now.toDate(); // Convert Moment to JavaScript Date
     model.boostedTo = boostedTo.toDate();
+    model.preference=2;
 
     console.log(`Boosted From: ${boostedFrom}`);
 console.log(`Boosted To: ${boostedTo}`);
