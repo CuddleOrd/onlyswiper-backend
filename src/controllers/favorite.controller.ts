@@ -105,6 +105,7 @@ const boostedTo = now.clone().add(boostDuration1, 'days');
     // model.boostedTo = boostedTo;
     model.boostedFrom = now.toDate(); // Convert Moment to JavaScript Date
     model.boostedTo = boostedTo.toDate();
+    model.preference=2;
 
     console.log(`Boosted From: ${boostedFrom}`);
 console.log(`Boosted To: ${boostedTo}`);
@@ -151,6 +152,7 @@ const boostedTo = now.clone().add(boostDuration1, 'days');
     // model.boostedTo = boostedTo;
     model.boostedFrom = now.toDate(); // Convert Moment to JavaScript Date
     model.boostedTo = boostedTo.toDate();
+    model.preference=2;
 
     console.log(`Boosted From: ${boostedFrom}`);
 console.log(`Boosted To: ${boostedTo}`);
