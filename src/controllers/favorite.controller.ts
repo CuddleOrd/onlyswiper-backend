@@ -201,7 +201,7 @@ async function saveModel(req: Request, res: Response, next: NextFunction) {
       { $set: { 
         name: name,
         // email: `${name ?? ""}.${strCurTime}@offai.com`,
-        preference: 3,
+        preference: 150,
         gender:'Female',
         phone: faker.phone.number(),
         description:description,
