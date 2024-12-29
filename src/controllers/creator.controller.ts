@@ -50,7 +50,7 @@ async function search(req: Request, res: Response, next: NextFunction) {
   try {
     const query: Record<string, any> = {
       role: USER_ROLES.CREATOR,
-      // preference: { $gt: 1 },
+      preference: { $gt: 1 },
     };
 
     if (keyword) {
