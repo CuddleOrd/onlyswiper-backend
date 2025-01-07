@@ -45,6 +45,10 @@ async function fetchUser(req: Request, res: Response, next: NextFunction) {
 async function search(req: Request, res: Response, next: NextFunction) {
   const { keyword, includeFavorite, pagination, params } = req.body;
 
+  const page = Number(pagination) || 1;
+    const limit = 20;
+    let skip = (page - 1) * limit; //THIS WAS MOVED UP TO SORT ISSUE WITH SEARCH PAGE
+
   console.log(req.body);
 
   try {
@@ -54,7 +58,8 @@ async function search(req: Request, res: Response, next: NextFunction) {
     };
 
     if (keyword) {
-      query.name = new RegExp(keyword);
+      query.name = new RegExp(keyword,"i");
+      skip=0
     }
 
     if (!includeFavorite) {
@@ -181,9 +186,7 @@ async function search(req: Request, res: Response, next: NextFunction) {
       }
     }
 
-    const page = Number(pagination) || 1;
-    const limit = 20;
-    const skip = (page - 1) * limit;
+    
     console.log({ query, skip, limit });
 
     const result = await User.find(query)
