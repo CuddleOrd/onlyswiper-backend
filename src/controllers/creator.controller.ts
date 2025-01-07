@@ -41,6 +41,7 @@ async function fetchUser(req: Request, res: Response, next: NextFunction) {
   } finally {
     next();
   }
+  
 }
 async function search(req: Request, res: Response, next: NextFunction) {
   const { keyword, includeFavorite, pagination, params } = req.body;
