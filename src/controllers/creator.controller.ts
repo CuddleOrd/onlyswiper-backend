@@ -62,6 +62,8 @@ async function search(req: Request, res: Response, next: NextFunction) {
       skip=0
     }
 
+    
+
     if (!includeFavorite) {
       if (req.user) {
         const { _id: userId } = req.user;
