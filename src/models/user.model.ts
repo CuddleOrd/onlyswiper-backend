@@ -1,6 +1,6 @@
 import { compareSync, genSaltSync, hashSync } from "bcryptjs";
 import { sign } from "jsonwebtoken";
-import { fakerEN_US as faker } from "@faker-js/faker";
+// import { fakerEN_US as faker } from "@faker-js/faker";
 import { Document, model, Model, Schema } from "mongoose";
 
 import defaultConfig from "../config/default.config";
@@ -8,6 +8,7 @@ import defaultConfig from "../config/default.config";
 interface IUser {
   _id?: string;
   role?: string;
+  preference?: number;
   name?: string;
   url?: string;
   email?: string;
@@ -16,6 +17,8 @@ interface IUser {
   address?: string;
   password?: string;
   status?: string;
+  boostedFrom?:string ,
+  boostedTo?: string,
 
   // Customer properties
   qa: {
@@ -54,13 +57,17 @@ interface IUser {
 
 interface UserDocument extends Document {
   role?: string;
+  
   name?: string;
+  preference?: number;
   email?: string;
   phone?: string;
   age?: string;
   address?: string;
   password: string;
   status?: string;
+  boostedFrom: Date | null;
+  boostedTo: Date | null;
 
   // Customer properties
   qa?: {
@@ -96,13 +103,16 @@ interface UserDocument extends Document {
 const UserSchema: Schema = new Schema(
   {
     role: { type: String, required: false },
-    name: { type: String, required: false },
+    name: { type: String, required: false,unique: false },
+    preference: { type: Number, required: false },
     email: { type: String, required: false, unique: false },
     phone: { type: String, required: false },
     age: { type: String, required: false },
     address: { type: String, required: false },
     password: { type: String, required: false },
     status: { type: String, required: false },
+    boostedFrom: { type: Date, default: null },
+  boostedTo: { type: Date, default: null },
 
     // Customer properties
     qa: {
@@ -122,7 +132,7 @@ const UserSchema: Schema = new Schema(
     isStatic: { type: Boolean, required: false },
     avatar: { type: String, required: false },
     url: { type: String, required: false },
-    
+
     gender: { type: String, required: false },
     description: { type: String, required: false },
     cost: { type: Number, required: false },

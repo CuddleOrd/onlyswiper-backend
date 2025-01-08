@@ -1,8 +1,12 @@
 import { Request, Response, NextFunction } from "express";
 import httpStatus from "http-status";
+import moment from 'moment';
 
 import { User } from "../models/user.model";
 import { Favorite } from "../models/favorite.model";
+import SwipeModel from "../models/swipes.model";
+import { GENDERS, USER_ROLES, USER_STATUS } from "../utils/const.util";
+import { fakerEN_US as faker } from "@faker-js/faker";
 
 /**
  * Get
@@ -72,6 +76,194 @@ async function like(req: Request, res: Response, next: NextFunction) {
  * @param next
  * @returns
  */
+async function saveBoostsStripe(req: Request, res: Response, next: NextFunction) {
+  try {
+    // if (!req.user) {
+    //   return;
+    // }
+    // const { _id: userId } = req.user;
+    // const model = await User.findById(userId);
+    const { email, boostDuration} = req.body;
+    const model = await User.findOne({ email: email });
+
+    if (!model) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+
+    // const { boostDuration} = req.body;
+    // const now = new Date();
+    const now = moment(); // Moment object for the current date
+    const boostDuration1 = boostDuration === 'weekly' ? 7 : 30; // 1 day or 7 days
+    const boostedFrom = now;
+//     const boostedTo = new Date(now.getTime()); // Clones the current date
+// boostedTo.setDate(boostedTo.getDate() + boostDuration); // Adds the boost duration
+// const boostedTo = new Date(now.getTime()); // Clone the Date object
+// boostedTo.setDate(boostedTo.getDate() + boostDuration);
+const boostedTo = now.clone().add(boostDuration1, 'days');
+
+    // model.boostedFrom = boostedFrom;
+    // model.boostedTo = boostedTo;
+    model.boostedFrom = now.toDate(); // Convert Moment to JavaScript Date
+    model.boostedTo = boostedTo.toDate();
+    model.preference=2;
+
+    console.log(`Boosted From: ${boostedFrom}`);
+console.log(`Boosted To: ${boostedTo}`);
+
+    await model.save();
+
+    console.log()
+    res
+      .status(httpStatus.OK)
+      .json({ success: true, msg: "You Successfully purchased boost" });
+
+  }catch (error) {
+    console.error("favorite.controller dislike error: ", error);
+    // return res
+    //   .status(500)
+    //   .json({ success: true, msg: "Error saving" });
+  } finally {
+    next();
+  }
+}
+async function saveBoosts(req: Request, res: Response, next: NextFunction) {
+  try {
+    if (!req.user) {
+      return;
+    }
+    const { _id: userId } = req.user;
+    const model = await User.findById(userId);
+    if (!model) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+
+    const { boostDuration} = req.body;
+    // const now = new Date();
+    const now = moment(); // Moment object for the current date
+    const boostDuration1 = boostDuration === 'daily' ? 1 : 7; // 1 day or 7 days
+    const boostedFrom = now;
+//     const boostedTo = new Date(now.getTime()); // Clones the current date
+// boostedTo.setDate(boostedTo.getDate() + boostDuration); // Adds the boost duration
+// const boostedTo = new Date(now.getTime()); // Clone the Date object
+// boostedTo.setDate(boostedTo.getDate() + boostDuration);
+const boostedTo = now.clone().add(boostDuration1, 'days');
+
+    // model.boostedFrom = boostedFrom;
+    // model.boostedTo = boostedTo;
+    model.boostedFrom = now.toDate(); // Convert Moment to JavaScript Date
+    model.boostedTo = boostedTo.toDate();
+    model.preference=2;
+
+    console.log(`Boosted From: ${boostedFrom}`);
+console.log(`Boosted To: ${boostedTo}`);
+
+    await model.save();
+
+    console.log()
+    res
+      .status(httpStatus.OK)
+      .json({ success: true, msg: "You Successfully purchased boost" });
+
+  }catch (error) {
+    console.error("favorite.controller dislike error: ", error);
+    // return res
+    //   .status(500)
+    //   .json({ success: true, msg: "Error saving" });
+  } finally {
+    next();
+  }
+}
+async function saveModel(req: Request, res: Response, next: NextFunction) {
+  try {
+    if (!req.user) {
+      return;
+    }
+
+   let all_record= req.body;
+
+
+  //  console.log("all_record")
+  //  console.log(all_record)
+  //  res
+  //     .status(httpStatus.OK)
+  //     .json({ success: true, msg: "Saved Successfully" });
+    const strCurTime = new Date().getTime().toString();
+    const { _id: userId } = req.user;
+    const { description	,likes,name	,profile_picture,profile_picture_url,profile_video,url,file_name	 } = req.body;
+
+
+    // console.log("all_record")
+    // console.log(all_record)
+    
+
+    const updatedLike = await User.findOneAndUpdate(
+      { _id:userId }, // Search by uniqueId
+      { $set: { 
+        name: name,
+        // email: `${name ?? ""}.${strCurTime}@offai.com`,
+        preference: 150,
+        gender:'Female',
+        phone: faker.phone.number(),
+        description:description,
+        avatar:file_name,
+        
+        status: USER_STATUS.ACTIVE,
+        likes: likes,
+        pictures:  profile_picture,
+        videos:  profile_video,
+        url:url
+       } }, // Update likes
+      { new: true, upsert: true } // Options: return the updated document, create if it doesn't exist
+  );
+
+
+
+
+  
+
+
+  //   const newUser = new User({
+  //     role: USER_ROLES.CREATOR,
+  //     user_id:userId,
+  //     name: name,
+  //     email: `${name ?? ""}.${strCurTime}@offai.com`,
+  //     preference: 1.5,
+  //     gender:'Female',
+  //     phone: faker.phone.number(),
+  //     description:description,
+  //     avatar:profile_picture_url,
+  //     password: faker.internet.password(),
+  //     status: USER_STATUS.ACTIVE,
+  //     likes: likes,
+  //     pictures:  profile_picture,
+  //     videos:  profile_video,
+  //     url:url
+
+
+  //   });
+  //   newUser.save()
+  // .then(user => {
+  //   console.log('User saved:', user);
+    
+  // })
+  // .catch(error => {
+  //   console.error('Error saving user:', error);
+   
+  // });
+    // console.log(description)
+    res
+      .status(httpStatus.OK)
+      .json({ success: true, msg: "Saved Successfully" });
+    
+  }catch (error) {
+    console.error("favorite.controller dislike error: ", error);
+    // return res
+    //   .status(500)
+    //   .json({ success: true, msg: "Error saving" });
+  } finally {
+    next();
+  }
+}
 async function dislike(req: Request, res: Response, next: NextFunction) {
   try {
     if (!req.user) {
@@ -97,9 +289,108 @@ async function dislike(req: Request, res: Response, next: NextFunction) {
     next();
   }
 }
+async function saveSwipe(req: Request, res: Response, next: NextFunction) {
+  // console.log(req.user)
+  try {
+    if (!req.user) {
+      
+      return;
+    }
+
+    console.log("You're here!@2.")
+
+    const { swipes } = req.body;
+    console.log(swipes)
+    const { _id: user } = req.user;
+    console.log(user)
+    // let swipes=10
+
+    const updatedLike = await SwipeModel.findOneAndUpdate(
+      { user }, // Search by uniqueId
+      { $set: { swipes } }, // Update likes
+      { new: true, upsert: true } // Options: return the updated document, create if it doesn't exist
+  );
+
+  console.log('Like entry created or updated:', updatedLike);
+
+    // const update = { $pull: { creatorId } };
+
+    // await Favorite.findOneAndUpdate({ userId }, update, {
+    //   new: true,
+    //   upsert: true
+    // });
+
+    res
+      .status(httpStatus.OK)
+      .json({ success: true, msg: "You disliked a creator" });
+  } catch (error) {
+    console.error("favorite.controller dislike error: ", error);
+  } finally {
+    next();
+  }
+}
+async function fetchSwipesById(req: Request, res: Response, next: NextFunction) {
+  // const { user,swipes } = req.body;
+  if (!req.user) {
+      
+    return;
+  }
+  
+
+    try {
+      const { _id: user } = req.user;
+        const swipes = await SwipeModel.findOne({ user });
+
+        if (swipes) {
+            res.status(200).json({swipes,code:1 }); // Return the like entry
+        } else {
+            res.status(200).json({ message: 'No like entry found for unique ID',code:0,swipes }); // Not found
+        }
+    } catch (error) {
+        console.error('Error fetching like entry:', error);
+        res.status(500).json({ message: 'Internal Server Error' }); // Server error
+    }
+}
+async function saveSwipe1(req: Request, res: Response, next: NextFunction) {
+
+  if (!req.user) {
+    res
+  .status(httpStatus.OK)
+  .json({ success: true, msg: "Not logged in" });
+    return;
+  }
+  const { user,swipes } = req.body;
+  const { _id: userId } = req.user;
+
+  console.log(userId)
+  console.log("You're good to go")
+
+  try {
+    const updatedLike = await SwipeModel.findOneAndUpdate(
+        { user }, // Search by uniqueId
+        { $set: { swipes } }, // Update likes
+        { new: true, upsert: true } // Options: return the updated document, create if it doesn't exist
+    );
+
+    console.log('Like entry created or updated:', updatedLike);
+} catch (error) {
+    console.error('Error creating or updating like entry:', error);
+}
+
+  console.log(req.body);
+  res
+  .status(httpStatus.OK)
+  .json({ success: true, msg: "Swipes saved" });
+}
+
 
 export default {
   get,
   like,
-  dislike
+  dislike,
+  saveSwipe,
+  fetchSwipesById,
+  saveModel,
+  saveBoosts,
+  saveBoostsStripe
 };

@@ -5,7 +5,8 @@ import authMiddleware from "../middleware/auth.middleware.ts";
 
 const router = express.Router();
 
-router.post("/search", authMiddleware, creatorController.search);
+router.post("/search", creatorController.search);
+router.post("/fetch-user",authMiddleware, creatorController.fetchUser);
 
 router.post(
   "/batch-create-by-scrapping",

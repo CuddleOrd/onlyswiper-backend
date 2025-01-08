@@ -44,13 +44,8 @@ async function login(req: Request, res: Response, next: NextFunction) {
       expiry.setHours(
         expiry.getHours() + defaultConfig.jwt.refresh.expiry_hour
       );
-    //   const refreshToken = new RefreshToken({
-    //     userId: user._id,
-    //     token: user.generateRefreshToken(),
-    //     expiry
-    //   });
       const refreshToken = new RefreshToken({
-          token: user.generateRefreshToken(),
+        token: user.generateRefreshToken(),
         userId: user._id,
         expiry
       });
@@ -232,7 +227,7 @@ async function regenerateToken(
       return;
     }
 
-    const user: IUser | null = await User.findOne({ userId: decodedUser._id });
+    const user: any = await User.findOne({ _id: decodedUser._id });
     if (!user) {
       res.status(httpStatus.NOT_ACCEPTABLE).json({
         success: false,

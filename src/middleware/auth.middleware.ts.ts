@@ -11,6 +11,8 @@ export default async function authMiddleware(
   res: Response,
   next: NextFunction
 ) {
+
+  // next();
   if (
     req.headers &&
     req.headers.authorization &&

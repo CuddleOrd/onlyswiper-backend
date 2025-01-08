@@ -9,32 +9,37 @@ import routes from "./routes";
 const app = express();
 
 // Cors configuration
-// const allowedOrigins = [
-//   "https://onlyfansfinder-ai.vercel.app",
-//   "https://www.onlyswiper.com",
-//   "https://onlyswiper.com",
-//   defaultConfig.app.frontend
-// ];
+const allowedOrigins = [
+  "https://onlyfansfinder-ai.vercel.app",
+  "https://www.onlyswiper.com",
+  "https://onlyswiper.com",
+  "https://clear-kindly-marmoset.ngrok-free.app",
+  "https://solid-icons-clean.loca.lt",
+  "https://onlyfansfinder-ai-theta.vercel.app",
+  "http://188.40.183.252",
+  "http://188.40.183.252:4041",
+  "http://localhost:4041",
+  "https://staging.onlyswiper.com",
+  "https://testsolana.roycelabs.xyz",
+  "https://07e5-197-237-75-80.ngrok-free.app",
+  defaultConfig.app.frontend
+];
+
 app.use(
-  cors(
-    {
-      origin: "*"
-    }
-    // {
-    // origin: (origin, callback) => {
-    //   if (!origin) return callback(null, true);
+  cors({
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true);
 
-    //   if (allowedOrigins.indexOf(origin) === -1) {
-    //     const msg =
-    //       "The CORS policy for this site does not allow access from the specified Origin.";
-    //     return callback(new Error(msg), false);
-    //   }
+      if (allowedOrigins.indexOf(origin) === -1) {
+        const msg =
+          "The CORS policy for this site does not allow access from the specified Origin.";
+        return callback(new Error(msg), false);
+      }
 
-    //   return callback(null, true);
-    // },
-    // credentials: true
-    // }
-  )
+      return callback(null, true);
+    },
+    credentials: true
+  })
 );
 
 // Parse request of content type

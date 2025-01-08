@@ -8,5 +8,11 @@ const router = express.Router();
 router.get("/get", authMiddleware, favoriteController.get);
 router.post("/like", authMiddleware, favoriteController.like);
 router.post("/dislike", authMiddleware, favoriteController.dislike);
+router.post("/dislike", authMiddleware, favoriteController.dislike);
+router.post("/save-swipe", authMiddleware, favoriteController.saveSwipe);
+router.post("/save-boosts", authMiddleware, favoriteController.saveBoosts);
+router.post("/save-model", authMiddleware, favoriteController.saveModel);
+router.post("/fetch-user-swipes", authMiddleware, favoriteController.fetchSwipesById);
+router.post("/save-boosts-stripe", favoriteController.saveBoostsStripe);
 
 export default router;
